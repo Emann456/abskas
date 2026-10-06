@@ -158,27 +158,27 @@
 
             <!-- Tab Bar Mobile & Desktop -->
             <div class="bg-slate-800 border-t border-slate-700/60 overflow-x-auto custom-scrollbar">
-                <div class="max-w-7xl mx-auto px-4 flex space-x-1 sm:space-x-2 py-2 text-sm whitespace-nowrap">
-                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active px-4 py-2 rounded-lg font-medium text-xs sm:text-sm flex items-center gap-2 transition bg-sky-600 text-white shadow">
+                <div class="max-w-7xl mx-auto px-4 flex space-x-2 py-3 text-sm whitespace-nowrap">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active px-4 py-3 sm:py-2 rounded-xl font-medium text-sm flex items-center gap-2 transition bg-sky-600 text-white shadow">
                         <i class="fa-solid fa-chart-pie"></i> Home
                     </button>
-                    <button onclick="switchTab('absensi')" id="tab-absensi" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                    <button onclick="switchTab('absensi')" id="tab-absensi" class="tab-btn px-4 py-3 sm:py-2 rounded-xl font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-clipboard-user"></i> Absensi
                     </button>
                     <!-- UANG KAS TAB DISEMBUNYIKAN UNTUK SEMENTARA -->
-                    <button onclick="switchTab('kas')" id="tab-kas" class="hidden tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                    <button onclick="switchTab('kas')" id="tab-kas" class="hidden tab-btn px-4 py-3 sm:py-2 rounded-xl font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-wallet"></i> Uang Kas
                     </button>
-                    <button onclick="switchTab('anggota')" id="tab-anggota" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                    <button onclick="switchTab('anggota')" id="tab-anggota" class="tab-btn px-4 py-3 sm:py-2 rounded-xl font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-user-group"></i> Data Anggota
                     </button>
-                    <button onclick="switchTab('rekap')" id="tab-rekap" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                    <button onclick="switchTab('rekap')" id="tab-rekap" class="tab-btn px-4 py-3 sm:py-2 rounded-xl font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-file-invoice"></i> Rekap Bulanan
                     </button>
-                    <button onclick="switchTab('materi')" id="tab-materi" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                    <button onclick="switchTab('materi')" id="tab-materi" class="tab-btn px-4 py-3 sm:py-2 rounded-xl font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-book-bookmark"></i> Materi
                     </button>
-                    <button onclick="switchTab('pengguna')" id="tab-pengguna" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                    <button onclick="switchTab('pengguna')" id="tab-pengguna" class="tab-btn px-4 py-3 sm:py-2 rounded-xl font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-shield-halved"></i> Akun Senior
                     </button>
                 </div>
@@ -308,37 +308,35 @@
                     </div>
 
                     <!-- Search & Filter Bar Mobile-Friendly -->
-                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 pb-3 border-b border-slate-50">
+                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 pb-4 border-b border-slate-50">
                         <!-- Pencarian Nama -->
                         <div class="relative w-full sm:w-1/2">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-                            <input type="text" id="search-absensi" onkeyup="filterAbsensiTable()" placeholder="Ketik nama siswa..." class="w-full border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                            <input type="text" id="search-absensi" onkeyup="filterAbsensiTable()" placeholder="Ketik nama siswa..." class="w-full border border-slate-300 rounded-xl pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none transition">
                         </div>
                         <!-- Filter Kelas Dinamis -->
                         <div class="w-full sm:w-1/3">
-                            <select id="filter-class-absensi" onchange="filterAbsensiTable()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none">
+                            <select id="filter-class-absensi" onchange="filterAbsensiTable()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition">
                                 <option value="Semua">Semua Kelas</option>
                                 <!-- Populated dynamically -->
                             </select>
                         </div>
                     </div>
 
-                    <!-- Student Attendance List -->
-                    <div class="mt-4 overflow-x-auto">
-                        <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase tracking-wider rounded-lg">
-                                <tr>
-                                    <th class="p-3.5 rounded-l-xl">No</th>
-                                    <th class="p-3.5">Nama Anggota</th>
-                                    <th class="p-3.5">Kelas</th>
-                                    <th class="p-3.5 text-center">Status Kehadiran</th>
-                                    <th class="p-3.5 rounded-r-xl w-1/3">Catatan / Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="attendance-table-body" class="divide-y divide-slate-100">
-                                <!-- Populated dynamically -->
-                            </tbody>
-                        </table>
+                    <!-- Student Attendance List (Mobile Optimized Cards) -->
+                    <div class="mt-5">
+                        <!-- List Header (Hidden on Mobile) -->
+                        <div class="hidden md:grid grid-cols-12 gap-4 bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-xl p-4 mb-3 border border-slate-100">
+                            <div class="col-span-1">No</div>
+                            <div class="col-span-3">Nama Anggota</div>
+                            <div class="col-span-2">Kelas</div>
+                            <div class="col-span-4 text-center">Status Kehadiran</div>
+                            <div class="col-span-2">Catatan</div>
+                        </div>
+                        
+                        <div id="attendance-list-container" class="space-y-4 md:space-y-3">
+                            <!-- Populated dynamically -->
+                        </div>
                     </div>
 
                     <!-- Footer Save Button -->
@@ -462,24 +460,24 @@
                     <!-- Search & Filter Bar -->
                     <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                         <div class="relative w-full sm:w-72">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-                            <input type="text" id="search-anggota" onkeyup="renderAnggotaTable()" placeholder="Cari nama, kelas, atau skill..." class="w-full border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                            <input type="text" id="search-anggota" onkeyup="renderAnggotaTable()" placeholder="Cari nama, kelas, atau skill..." class="w-full border border-slate-300 rounded-xl pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none transition">
                         </div>
                         <span id="member-count-badge" class="text-xs text-slate-500 font-medium">Menampilkan 0 Anggota</span>
                     </div>
 
                     <!-- Member Table -->
-                    <div class="mt-4 overflow-x-auto">
+                    <div class="mt-4 overflow-x-auto custom-scrollbar pb-2">
                         <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase">
+                            <thead class="bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-wider">
                                 <tr>
-                                    <th class="p-3.5 rounded-l-xl">No</th>
-                                    <th class="p-3.5">Nama Lengkap</th>
-                                    <th class="p-3.5">Kelas</th>
-                                    <th class="p-3.5">Fisik (BB / TB)</th>
-                                    <th class="p-3.5">Skill Utama</th>
-                                    <th class="p-3.5">Status Eskul</th>
-                                    <th class="p-3.5 text-right rounded-r-xl">Aksi</th>
+                                    <th class="px-4 py-4 rounded-l-xl">No</th>
+                                    <th class="px-4 py-4">Nama Lengkap</th>
+                                    <th class="px-4 py-4">Kelas</th>
+                                    <th class="px-4 py-4">Fisik (BB / TB)</th>
+                                    <th class="px-4 py-4">Skill Utama</th>
+                                    <th class="px-4 py-4">Status Eskul</th>
+                                    <th class="px-4 py-4 text-right rounded-r-xl">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="anggota-table-body" class="divide-y divide-slate-100">
@@ -558,18 +556,18 @@
                     </div>
 
                     <!-- Summary Table -->
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto custom-scrollbar pb-2">
                         <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="bg-slate-100 text-slate-700 text-xs font-semibold uppercase">
+                            <thead class="bg-slate-50 text-slate-700 text-xs font-bold uppercase tracking-wider">
                                 <tr>
-                                    <th class="p-3.5 rounded-l-xl">Nama Siswa</th>
-                                    <th class="p-3.5">Kelas</th>
-                                    <th class="p-3.5 text-center">Total Hadir</th>
-                                    <th class="p-3.5 text-center">Izin / Sakit</th>
-                                    <th class="p-3.5 text-center">Alpa</th>
-                                    <th class="p-3.5 text-center rounded-r-xl">% Kehadiran</th>
+                                    <th class="px-4 py-4 rounded-l-xl">Nama Siswa</th>
+                                    <th class="px-4 py-4">Kelas</th>
+                                    <th class="px-4 py-4 text-center">Total Hadir</th>
+                                    <th class="px-4 py-4 text-center">Izin / Sakit</th>
+                                    <th class="px-4 py-4 text-center">Alpa</th>
+                                    <th class="px-4 py-4 text-center rounded-r-xl">% Kehadiran</th>
                                     <!-- Sembunyikan Kolom Kas -->
-                                    <th class="hidden p-3.5 text-right rounded-r-xl">Total Kas Terbayar</th>
+                                    <th class="hidden px-4 py-4 text-right rounded-r-xl">Total Kas Terbayar</th>
                                 </tr>
                             </thead>
                             <tbody id="rekap-table-body" class="divide-y divide-slate-100">
@@ -1084,7 +1082,6 @@
                 tabName = 'dashboard';
             }
 
-            // 'kas' dihapus dari loop agar class hidden miliknya tidak tereset secara otomatis
             const tabs = ['dashboard', 'absensi', 'anggota', 'rekap', 'materi', 'pengguna'];
             tabs.forEach(t => {
                 const view = document.getElementById(`view-${t}`);
@@ -1093,10 +1090,10 @@
                 
                 if (t === tabName) {
                     view.classList.remove('hidden');
-                    btn.className = "tab-btn active px-4 py-2 rounded-lg font-medium text-xs sm:text-sm flex items-center gap-2 transition bg-sky-600 text-white shadow";
+                    btn.className = "tab-btn active px-4 py-3 sm:py-2 rounded-xl font-medium text-sm flex items-center gap-2 transition bg-sky-600 text-white shadow";
                 } else {
                     view.classList.add('hidden');
-                    btn.className = "tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition";
+                    btn.className = "tab-btn px-4 py-3 sm:py-2 rounded-xl font-medium text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition";
                 }
             });
 
@@ -1392,15 +1389,15 @@
                 document.getElementById('absensi-date-input').value = todayStr;
             }
 
-            const tbody = document.getElementById('attendance-table-body');
-            if (!tbody) return;
-            tbody.innerHTML = '';
+            const container = document.getElementById('attendance-list-container');
+            if (!container) return;
+            container.innerHTML = '';
 
             const currentSession = state.attendance[selectedDate] || {};
             const activeMembers = state.members.filter(m => m.status === 'Aktif');
 
             if (activeMembers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-xs text-slate-400">Belum ada anggota aktif. Tambahkan anggota dulu.</td></tr>`;
+                container.innerHTML = `<div class="text-center py-10 bg-slate-50 rounded-2xl border border-slate-100 text-sm text-slate-500 font-medium">Belum ada anggota aktif. Tambahkan anggota dulu.</div>`;
                 return;
             }
 
@@ -1420,29 +1417,40 @@
             activeMembers.forEach((m, idx) => {
                 const record = currentSession[m.id] || { status: 'Hadir', note: '' };
                 const st = record.status;
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition absensi-row";
-                tr.setAttribute('data-name', m.name);
-                tr.setAttribute('data-class', m.class);
+                const div = document.createElement('div');
+                div.className = "absensi-row bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-5 md:p-4 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-4 transition";
+                div.setAttribute('data-name', m.name);
+                div.setAttribute('data-class', m.class);
                 
-                tr.innerHTML = `
-                    <td class="p-3.5 text-xs text-slate-500 font-medium">${idx + 1}</td>
-                    <td class="p-3.5 font-bold text-slate-800 text-xs">${m.name}</td>
-                    <td class="p-3.5 text-xs text-slate-600">${m.class}</td>
-                    <td class="p-3.5 text-center">
-                        <div class="flex items-center justify-center gap-1 sm:gap-1.5">
-                            <button type="button" onclick="changeAttStatus('${m.id}', 'Hadir')" id="btn-H-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Hadir' ? 'bg-emerald-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">H</button>
-                            <button type="button" onclick="changeAttStatus('${m.id}', 'Izin')" id="btn-I-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Izin' ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">I</button>
-                            <button type="button" onclick="changeAttStatus('${m.id}', 'Sakit')" id="btn-S-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Sakit' ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">S</button>
-                            <button type="button" onclick="changeAttStatus('${m.id}', 'Alpa')" id="btn-A-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Alpa' ? 'bg-rose-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">A</button>
+                div.innerHTML = `
+                    <div class="md:col-span-1 text-sm text-slate-400 font-bold hidden md:block">${idx + 1}</div>
+                    <div class="md:col-span-3 flex justify-between items-center md:block border-b border-slate-100 md:border-0 pb-3 md:pb-0">
+                        <div class="font-bold text-slate-800 text-lg md:text-base">${m.name}</div>
+                        <div class="text-xs font-bold px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg md:hidden">Kls ${m.class}</div>
+                    </div>
+                    <div class="md:col-span-2 text-sm font-medium text-slate-600 hidden md:block">${m.class}</div>
+                    <div class="md:col-span-4 w-full">
+                        <div class="flex items-center justify-between md:justify-center gap-2 p-1.5 bg-slate-100 md:bg-transparent rounded-xl border border-slate-200 md:border-0">
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Hadir')" id="btn-H-${m.id}" class="flex-1 md:flex-none md:w-11 md:h-11 py-3 md:py-0 rounded-lg font-bold text-sm md:text-base transition-all duration-200 ${st === 'Hadir' ? 'bg-emerald-500 text-white shadow-md md:scale-110 ring-2 ring-emerald-500 ring-offset-1' : 'bg-white md:bg-slate-100 text-slate-500 hover:bg-slate-200 shadow-sm md:shadow-none border border-slate-200 md:border-transparent'}">
+                                <span class="block md:hidden">Hadir</span><span class="hidden md:block">H</span>
+                            </button>
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Izin')" id="btn-I-${m.id}" class="flex-1 md:flex-none md:w-11 md:h-11 py-3 md:py-0 rounded-lg font-bold text-sm md:text-base transition-all duration-200 ${st === 'Izin' ? 'bg-amber-500 text-white shadow-md md:scale-110 ring-2 ring-amber-500 ring-offset-1' : 'bg-white md:bg-slate-100 text-slate-500 hover:bg-slate-200 shadow-sm md:shadow-none border border-slate-200 md:border-transparent'}">
+                                <span class="block md:hidden">Izin</span><span class="hidden md:block">I</span>
+                            </button>
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Sakit')" id="btn-S-${m.id}" class="flex-1 md:flex-none md:w-11 md:h-11 py-3 md:py-0 rounded-lg font-bold text-sm md:text-base transition-all duration-200 ${st === 'Sakit' ? 'bg-amber-500 text-white shadow-md md:scale-110 ring-2 ring-amber-500 ring-offset-1' : 'bg-white md:bg-slate-100 text-slate-500 hover:bg-slate-200 shadow-sm md:shadow-none border border-slate-200 md:border-transparent'}">
+                                <span class="block md:hidden">Sakit</span><span class="hidden md:block">S</span>
+                            </button>
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Alpa')" id="btn-A-${m.id}" class="flex-1 md:flex-none md:w-11 md:h-11 py-3 md:py-0 rounded-lg font-bold text-sm md:text-base transition-all duration-200 ${st === 'Alpa' ? 'bg-rose-500 text-white shadow-md md:scale-110 ring-2 ring-rose-500 ring-offset-1' : 'bg-white md:bg-slate-100 text-slate-500 hover:bg-slate-200 shadow-sm md:shadow-none border border-slate-200 md:border-transparent'}">
+                                <span class="block md:hidden">Alpa</span><span class="hidden md:block">A</span>
+                            </button>
                             <input type="hidden" id="att-status-${m.id}" value="${st}">
                         </div>
-                    </td>
-                    <td class="p-3.5">
-                        <input type="text" id="att-note-${m.id}" value="${record.note || ''}" placeholder="Catatan..." class="w-full border border-slate-200 rounded-lg px-3 py-1 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
-                    </td>
+                    </div>
+                    <div class="md:col-span-2 w-full mt-1 md:mt-0">
+                        <input type="text" id="att-note-${m.id}" value="${record.note || ''}" placeholder="Catatan opsional..." class="w-full border border-slate-300 bg-slate-50 rounded-xl px-4 py-3 md:py-2.5 text-sm focus:ring-2 focus:ring-sky-500 outline-none transition">
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(div);
             });
 
             document.getElementById('attendance-status-text').innerText = state.attendance[selectedDate] 
@@ -1457,19 +1465,19 @@
             const statuses = ['Hadir', 'Izin', 'Sakit', 'Alpa'];
             const labels = { Hadir: 'H', Izin: 'I', Sakit: 'S', Alpa: 'A' };
             const colors = { 
-                Hadir: 'bg-emerald-500 text-white shadow-md', 
-                Izin: 'bg-amber-500 text-white shadow-md', 
-                Sakit: 'bg-amber-500 text-white shadow-md', 
-                Alpa: 'bg-rose-500 text-white shadow-md' 
+                Hadir: 'bg-emerald-500 text-white shadow-md md:scale-110 ring-2 ring-emerald-500 ring-offset-1', 
+                Izin: 'bg-amber-500 text-white shadow-md md:scale-110 ring-2 ring-amber-500 ring-offset-1', 
+                Sakit: 'bg-amber-500 text-white shadow-md md:scale-110 ring-2 ring-amber-500 ring-offset-1', 
+                Alpa: 'bg-rose-500 text-white shadow-md md:scale-110 ring-2 ring-rose-500 ring-offset-1' 
             };
 
             statuses.forEach(s => {
                 const btn = document.getElementById(`btn-${labels[s]}-${id}`);
                 if (btn) {
                     if (s === status) {
-                        btn.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${colors[s]}`;
+                        btn.className = `flex-1 md:flex-none md:w-11 md:h-11 py-3 md:py-0 rounded-lg font-bold text-sm md:text-base transition-all duration-200 ${colors[s]}`;
                     } else {
-                        btn.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition bg-slate-100 text-slate-400 hover:bg-slate-200`;
+                        btn.className = `flex-1 md:flex-none md:w-11 md:h-11 py-3 md:py-0 rounded-lg font-bold text-sm md:text-base transition-all duration-200 bg-white md:bg-slate-100 text-slate-500 hover:bg-slate-200 shadow-sm md:shadow-none border border-slate-200 md:border-transparent`;
                     }
                 }
             });
@@ -1690,36 +1698,36 @@
             document.getElementById('member-count-badge').innerText = `Menampilkan ${filtered.length} Anggota`;
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-xs text-slate-400">Tidak ada anggota ditemukan.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-sm text-slate-400">Tidak ada anggota ditemukan.</td></tr>`;
                 return;
             }
 
             filtered.forEach((m, idx) => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-50 last:border-0";
                 tr.innerHTML = `
-                    <td class="p-3.5 text-xs text-slate-500 font-medium">${idx + 1}</td>
-                    <td class="p-3.5 font-bold text-slate-800 text-xs">
+                    <td class="px-4 py-4 text-sm text-slate-500 font-medium">${idx + 1}</td>
+                    <td class="px-4 py-4 font-bold text-slate-800 text-sm">
                         <button onclick="showMemberDetail('${m.id}')" class="text-left hover:text-sky-600 font-bold flex items-center gap-1.5">
                             ${m.name} <i class="fa-solid fa-circle-info text-slate-400 text-[10px]"></i>
                         </button>
                     </td>
-                    <td class="p-3.5 text-xs text-slate-600">${m.class}</td>
-                    <td class="p-3.5 text-xs font-mono text-slate-700">${m.weight ? m.weight + ' kg' : '-'} / ${m.height ? m.height + ' cm' : '-'}</td>
-                    <td class="p-3.5 text-xs">
-                        <span class="bg-sky-50 text-sky-700 px-2 py-0.5 rounded-md text-[11px] font-medium border border-sky-100 max-w-[150px] truncate block" title="${m.skills || 'Belum diisi'}">
+                    <td class="px-4 py-4 text-sm text-slate-600">${m.class}</td>
+                    <td class="px-4 py-4 text-sm font-mono text-slate-700">${m.weight ? m.weight + ' kg' : '-'} / ${m.height ? m.height + ' cm' : '-'}</td>
+                    <td class="px-4 py-4 text-xs">
+                        <span class="bg-sky-50 text-sky-700 px-3 py-1 rounded-lg font-medium border border-sky-100 max-w-[150px] truncate block" title="${m.skills || 'Belum diisi'}">
                             ${m.skills || 'Belum diisi'}
                         </span>
                     </td>
-                    <td class="p-3.5 text-xs">
-                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold ${m.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
+                    <td class="px-4 py-4 text-xs">
+                        <span class="px-3 py-1.5 rounded-full font-bold ${m.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
                             ${m.status}
                         </span>
                     </td>
-                    <td class="p-3.5 text-right space-x-1">
-                        <button onclick="showMemberDetail('${m.id}')" class="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg text-xs transition" title="Lihat Detail"><i class="fa-solid fa-eye"></i></button>
-                        <button onclick="editMember('${m.id}')" class="text-sky-600 hover:bg-sky-50 p-2 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                        ${currentUserRole === 'Pelatih Utama' ? `<button onclick="deleteMember('${m.id}')" class="text-rose-600 hover:bg-rose-50 p-2 rounded-lg text-xs transition" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    <td class="px-4 py-4 text-right space-x-1 whitespace-nowrap">
+                        <button onclick="showMemberDetail('${m.id}')" class="text-emerald-600 hover:bg-emerald-50 p-2.5 rounded-lg text-sm transition" title="Lihat Detail"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="editMember('${m.id}')" class="text-sky-600 hover:bg-sky-50 p-2.5 rounded-lg text-sm transition" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        ${currentUserRole === 'Pelatih Utama' ? `<button onclick="deleteMember('${m.id}')" class="text-rose-600 hover:bg-rose-50 p-2.5 rounded-lg text-sm transition" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1969,7 +1977,7 @@
 
             const activeMembers = state.members.filter(m => m.status === 'Aktif');
             if (activeMembers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-xs text-slate-400">Tidak ada data untuk direkap.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-sm text-slate-400">Tidak ada data untuk direkap.</td></tr>`;
                 return;
             }
 
@@ -1996,17 +2004,17 @@
                 });
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition text-xs";
+                tr.className = "hover:bg-slate-50 transition text-sm border-b border-slate-50 last:border-0";
                 tr.innerHTML = `
-                    <td class="p-3.5 font-bold text-slate-800">${m.name}</td>
-                    <td class="p-3.5 text-slate-600">${m.class}</td>
-                    <td class="p-3.5 text-center font-semibold text-emerald-600">${hadir}</td>
-                    <td class="p-3.5 text-center font-semibold text-amber-600">${izin}</td>
-                    <td class="p-3.5 text-center font-semibold text-rose-600">${alpa}</td>
-                    <td class="p-3.5 text-center font-bold">
-                        <span class="px-2 py-0.5 rounded-md ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}%</span>
+                    <td class="px-4 py-4 font-bold text-slate-800">${m.name}</td>
+                    <td class="px-4 py-4 text-slate-600">${m.class}</td>
+                    <td class="px-4 py-4 text-center font-bold text-emerald-600 text-base">${hadir}</td>
+                    <td class="px-4 py-4 text-center font-bold text-amber-600 text-base">${izin}</td>
+                    <td class="px-4 py-4 text-center font-bold text-rose-600 text-base">${alpa}</td>
+                    <td class="px-4 py-4 text-center font-bold">
+                        <span class="px-3 py-1.5 rounded-lg text-xs ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}%</span>
                     </td>
-                    <td class="hidden p-3.5 text-right font-bold text-sky-700">Rp ${totalPaid.toLocaleString('id-ID')}</td>
+                    <td class="hidden px-4 py-4 text-right font-bold text-sky-700">Rp ${totalPaid.toLocaleString('id-ID')}</td>
                 `;
                 tbody.appendChild(tr);
             });
