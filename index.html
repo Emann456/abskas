@@ -1276,6 +1276,13 @@
         }
         window.updateUserRoleBadge = applyRolePermissions;
 
+        // --- FUNGSI HELPER UNTUK LOGIKA FILTER KELAS ---
+        // Memotong string kelas, contoh: "8 (kelas Z)" -> "8"
+        function getBaseClass(classString) {
+            if (!classString) return '-';
+            return classString.trim().split(' ')[0];
+        }
+
         window.renderAllViews = function() {
             renderDashboard();
             loadAttendanceForDate();
@@ -1401,10 +1408,13 @@
                 return;
             }
 
-            // Membangun Dropdown Filter Kelas secara dinamis
+            // Membangun Dropdown Filter Kelas secara dinamis dengan Logika Ekstrak Angka
             const classFilter = document.getElementById('filter-class-absensi');
             const currentFilterVal = classFilter?.value || 'Semua';
-            const uniqueClasses = [...new Set(activeMembers.map(m => m.class))].sort();
+            
+            // Mengambil angka awal (Base Class) lalu menghapus duplikat dengan Set
+            const baseClassesArray = activeMembers.map(m => getBaseClass(m.class));
+            const uniqueClasses = [...new Set(baseClassesArray)].sort();
             
             if (classFilter) {
                 let classOptions = `<option value="Semua">Semua Kelas</option>`;
@@ -1485,14 +1495,17 @@
 
         window.filterAbsensiTable = function() {
             const search = (document.getElementById('search-absensi')?.value || '').toLowerCase();
-            const cls = document.getElementById('filter-class-absensi')?.value || 'Semua';
+            const selectedClass = document.getElementById('filter-class-absensi')?.value || 'Semua';
             const rows = document.querySelectorAll('.absensi-row');
 
             rows.forEach(row => {
                 const name = row.getAttribute('data-name').toLowerCase();
-                const rowCls = row.getAttribute('data-class');
+                const rowClsFull = row.getAttribute('data-class');
+                const rowBaseClass = getBaseClass(rowClsFull); // Cek base classnya
+
                 const matchSearch = name.includes(search);
-                const matchClass = cls === 'Semua' || rowCls === cls;
+                // Filter dropdown sekarang mencocokkan Base Class-nya saja
+                const matchClass = selectedClass === 'Semua' || rowBaseClass === selectedClass;
 
                 if (matchSearch && matchClass) {
                     row.style.display = '';
