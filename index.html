@@ -1277,10 +1277,11 @@
         window.updateUserRoleBadge = applyRolePermissions;
 
         // --- FUNGSI HELPER UNTUK LOGIKA FILTER KELAS ---
-        // Memotong string kelas, contoh: "8 (kelas Z)" -> "8"
-        function getBaseClass(classString) {
-            if (!classString) return '-';
-            return classString.trim().split(' ')[0];
+                function getBaseClass(clsString) {
+          if (!clsString) return '';
+          // Mengambil angka pertama yang ditemukan di dalam teks
+          const match = clsString.match(/\d+/);
+          return match ? match[0] : clsString;
         }
 
         window.renderAllViews = function() {
