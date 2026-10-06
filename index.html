@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abskas Pro</title>
+    
+    <!-- Mobile App Configuration & Status Bar (PWA) -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Abskas Pro">
+    <meta name="application-name" content="Abskas Pro">
+
+    <!-- Logo / App Icon Modern (Gradient Sky-Indigo + Badge Logo) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%230284c7;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%234338ca;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='url(%23grad)'/%3E%3Cpath fill='white' d='M152 120h208c13.3 0 24 10.7 24 24v224c0 13.3-10.7 24-24 24H152c-13.3 0-24-10.7-24-24V144c0-13.3 10.7-24 24-24zm56 64c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24zm96 0c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24zm-96 96c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24zm96 0c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24z'/%3E%3Ccircle cx='380' cy='130' r='45' fill='%2310b981' stroke='%230f172a' stroke-width='10'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%230284c7;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%234338ca;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='url(%23grad)'/%3E%3Cpath fill='white' d='M152 120h208c13.3 0 24 10.7 24 24v224c0 13.3-10.7 24-24 24H152c-13.3 0-24-10.7-24-24V144c0-13.3 10.7-24 24-24zm56 64c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24zm96 0c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24zm-96 96c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24zm96 0c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24z'/%3E%3Ccircle cx='380' cy='130' r='45' fill='%2310b981' stroke='%230f172a' stroke-width='10'/%3E%3C/svg%3E">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js for Reports -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Supabase JS Client library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+
+    <!-- MANDATORY LOGIN GATE OVERLAY -->
+    <div id="login-gate" class="fixed inset-0 z-50 bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900/90 border border-slate-800/80 backdrop-blur-xl rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-white transform transition-all">
+            <!-- Header Logo -->
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-sky-500 mx-auto flex items-center justify-center font-bold text-2xl shadow-lg shadow-sky-500/30 mb-3">
+                    <i class="fa-solid fa-users-rectangle text-white"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold tracking-tight">E-Absen</h2>
+                <p class="text-xs text-slate-400 mt-1">Absensi dan Kelola Kas Ekstrakulikuler</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="form-gate-login" onsubmit="handleGateLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Pilih Peran Pengguna</label>
+                    <select id="gate-role" onchange="toggleGateRoleInputs()" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium text-white focus:ring-2 focus:ring-sky-500 outline-none">
+                        <option value="Pelatih Utama">Pelatih Utama</option>
+                        <option value="Senior">Senior / Asisten Pelatih</option>
+                    </select>
+                </div>
+
+                <div id="gate-container-senior-select" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Pilih Akun Senior</label>
+                    <select id="gate-senior-id" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-medium text-white focus:ring-2 focus:ring-sky-500 outline-none">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Masukkan PIN Akses</label>
+                    <div class="relative">
+                        <input type="password" id="gate-pin" maxlength="6" required placeholder="••••••" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-3 text-center text-xl tracking-widest font-bold text-white focus:ring-2 focus:ring-sky-500 outline-none">
+                        <button type="button" onclick="togglePinVisibility()" class="absolute right-3 top-3 text-slate-400 hover:text-slate-200 text-sm">
+                            <i id="pin-toggle-icon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Hint -->
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3 text-[11px] text-slate-400 flex items-start gap-2">
+                    <i class="fa-solid fa-circle-info text-sky-400 mt-0.5"></i>
+                    <div>
+                        <p id="hint-text-coach"><span class="font-bold text-sky-400">Pelatih baik hati:)</span></p>
+                        <p id="hint-text-senior" class="hidden"><span class="font-bold text-indigo-400">PIN Senior tanya ke pelatih!</span></p>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="gate-error-msg" class="hidden text-xs text-rose-400 font-semibold bg-rose-950/50 p-3 rounded-xl text-center border border-rose-800/60">
+                    PIN yang Anda masukkan salah!
+                </div>
+
+                <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-sky-600/30 text-xs sm:text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> Masuk
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER (Hidden until login) -->
+    <div id="app-container" class="hidden flex-col min-h-screen">
+
+        <!-- Navigation Header -->
+        <header class="bg-slate-900 text-white shadow-md sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Logo & Title -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center font-bold text-xl shadow-lg shadow-sky-500/30">
+                            <i class="fa-solid fa-users-rectangle text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-lg leading-tight">Abskas Pro</h1>
+                            <p class="text-xs text-slate-400">Versi Beta</p>
+                        </div>
+                    </div>
+
+                    <!-- User Profile & Action -->
+                    <div class="flex items-center space-x-3">
+                        <button onclick="openModalSupabase()" id="supabase-status-btn" class="flex items-center bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-full px-3 py-1 text-xs text-slate-300 transition" title="Pengaturan Database Supabase">
+                            <span id="db-status-dot" class="w-2 h-2 rounded-full bg-amber-400 mr-2 animate-pulse"></span>
+                            <span id="db-status-text" class="font-medium text-[11px]">Local Storage</span>
+                        </button>
+
+                        <div id="user-badge" class="flex items-center bg-slate-800 border border-slate-700 rounded-full px-3 py-1 text-xs text-slate-300">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2"></span>
+                            <span id="current-user-role" class="font-medium">Pelatih Utama</span>
+                        </div>
+
+                        <button onclick="logoutUser()" class="text-slate-300 hover:text-white bg-slate-800 hover:bg-rose-900/40 px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-2 border border-slate-700 hover:border-rose-700">
+                            <i class="fa-solid fa-right-from-bracket text-rose-400"></i>
+                            <span class="hidden sm:inline">Keluar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Bar Mobile & Desktop -->
+            <div class="bg-slate-800 border-t border-slate-700/60 overflow-x-auto custom-scrollbar">
+                <div class="max-w-7xl mx-auto px-4 flex space-x-1 sm:space-x-2 py-2 text-sm whitespace-nowrap">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active px-4 py-2 rounded-lg font-medium text-xs sm:text-sm flex items-center gap-2 transition bg-sky-600 text-white shadow">
+                        <i class="fa-solid fa-chart-pie"></i> Home
+                    </button>
+                    <button onclick="switchTab('absensi')" id="tab-absensi" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                        <i class="fa-solid fa-clipboard-user"></i> Absensi
+                    </button>
+                    <!-- UANG KAS TAB DISEMBUNYIKAN UNTUK SEMENTARA -->
+                    <button onclick="switchTab('kas')" id="tab-kas" class="hidden tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                        <i class="fa-solid fa-wallet"></i> Uang Kas
+                    </button>
+                    <button onclick="switchTab('anggota')" id="tab-anggota" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                        <i class="fa-solid fa-user-group"></i> Data Anggota
+                    </button>
+                    <button onclick="switchTab('rekap')" id="tab-rekap" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                        <i class="fa-solid fa-file-invoice"></i> Rekap Bulanan
+                    </button>
+                    <button onclick="switchTab('materi')" id="tab-materi" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                        <i class="fa-solid fa-book-bookmark"></i> Materi
+                    </button>
+                    <button onclick="switchTab('pengguna')" id="tab-pengguna" class="tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
+                        <i class="fa-solid fa-shield-halved"></i> Akun Senior
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+            
+            <!-- DASHBOARD VIEW -->
+            <section id="view-dashboard" class="space-y-6">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-sky-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold">Selamat Datang, <span id="dash-user-name">Pelatih</span>!</h2>
+                        <p class="text-sky-100 text-sm mt-1">Reminder absen dan kas disini. langsung bisa dipantau Kak Fathur!</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="switchTab('absensi')" class="bg-white text-sky-700 font-semibold px-4 py-2.5 rounded-xl hover:bg-sky-50 transition shadow text-xs sm:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-plus-circle"></i> Absen Hari Ini
+                        </button>
+                        <!-- TOMBOL CATAT KAS DISEMBUNYIKAN UNTUK SEMENTARA -->
+                        <button onclick="switchTab('kas')" class="hidden bg-sky-500/40 hover:bg-sky-500/60 border border-white/20 text-white font-medium px-4 py-2.5 rounded-xl transition text-xs sm:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-hand-holding-dollar"></i> Catat Kas
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid (Kas stats disembunyikan sementara) -->
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Anggota</span>
+                            <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                        </div>
+                        <p id="stat-total-anggota" class="text-2xl font-bold text-slate-800 mt-2">0</p>
+                        <span class="text-xs text-slate-500 mt-1 block">Siswa Aktif</span>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Hadir Hari Ini</span>
+                            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                        </div>
+                        <p id="stat-hadir-today" class="text-2xl font-bold text-slate-800 mt-2">0</p>
+                        <span id="stat-absensi-date" class="text-xs text-emerald-600 font-medium mt-1 block">Hari ini</span>
+                    </div>
+
+                    <!-- KARTU KAS BERSIH DISEMBUNYIKAN -->
+                    <div class="hidden bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Kas Bersih</span>
+                            <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                        </div>
+                        <p id="stat-total-kas" class="text-2xl font-bold text-slate-800 mt-2">Rp 0</p>
+                        <span class="text-xs text-sky-600 font-medium mt-1 block">Saldo Saat Ini</span>
+                    </div>
+
+                    <!-- KARTU PENGELUARAN DISEMBUNYIKAN -->
+                    <div class="hidden bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pengeluaran</span>
+                            <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                        </div>
+                        <p id="stat-total-pengeluaran" class="text-2xl font-bold text-slate-800 mt-2">Rp 0</p>
+                        <span class="text-xs text-slate-500 mt-1 block">Total Terpakai</span>
+                    </div>
+                </div>
+
+                <!-- Recent Activity & Quick Overview -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Chart Summary -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-slate-800 text-sm sm:text-base">Grafik Kehadiran</h3>
+                            <span class="text-xs bg-slate-100 text-slate-600 font-medium px-2.5 py-1 rounded-md">Bulan Ini</span>
+                        </div>
+                        <div class="relative h-64 w-full">
+                            <canvas id="dashboardChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Attendance List -->
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-bold text-slate-800 text-sm">Aktivitas Terakhir</h3>
+                            <div class="flex items-center gap-2">
+                                <button id="btn-reset-absensi-dash" onclick="resetAbsensi()" class="text-[10px] bg-rose-50 text-rose-600 hover:bg-rose-100 font-semibold px-2 py-1 rounded border border-rose-200 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-trash"></i> Reset
+                                </button>
+                                <button onclick="switchTab('absensi')" class="text-xs text-sky-600 font-semibold hover:underline">Lihat Semua</button>
+                            </div>
+                        </div>
+                        <div id="dashboard-recent-log" class="space-y-3 overflow-y-auto max-h-64 custom-scrollbar pr-1 flex-grow">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABSENSI VIEW -->
+            <section id="view-absensi" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <!-- Header Control -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">Presensi Kehadiran</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Pilih tanggal dan centang kehadiran anggota eskul.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Tanggal Absensi</label>
+                                <input type="date" id="absensi-date-input" onchange="loadAttendanceForDate()" class="border border-slate-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                            </div>
+                            <button onclick="markAllPresent()" class="self-end bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs px-3.5 py-2.5 rounded-xl transition border border-emerald-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-check-double"></i> Semua Hadir
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter Bar Mobile-Friendly -->
+                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 pb-3 border-b border-slate-50">
+                        <!-- Pencarian Nama -->
+                        <div class="relative w-full sm:w-1/2">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="search-absensi" onkeyup="filterAbsensiTable()" placeholder="Ketik nama siswa..." class="w-full border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <!-- Filter Kelas Dinamis -->
+                        <div class="w-full sm:w-1/3">
+                            <select id="filter-class-absensi" onchange="filterAbsensiTable()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none">
+                                <option value="Semua">Semua Kelas</option>
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Student Attendance List -->
+                    <div class="mt-4 overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase tracking-wider rounded-lg">
+                                <tr>
+                                    <th class="p-3.5 rounded-l-xl">No</th>
+                                    <th class="p-3.5">Nama Anggota</th>
+                                    <th class="p-3.5">Kelas</th>
+                                    <th class="p-3.5 text-center">Status Kehadiran</th>
+                                    <th class="p-3.5 rounded-r-xl w-1/3">Catatan / Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-table-body" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer Save Button -->
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span id="attendance-status-text" class="text-xs text-slate-500">Belum disimpan untuk tanggal ini.</span>
+                        <button onclick="saveAttendanceSession()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-lg shadow-sky-600/30 transition flex items-center gap-2">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan Presensi
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- UANG KAS VIEW (Kode tetap dijaga jika nanti diaktifkan kembali) -->
+            <section id="view-kas" class="hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Left Column: Catat Pembayaran Kas -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                            <div>
+                                <h2 class="text-xl font-bold text-slate-800">Pembayaran Uang Kas</h2>
+                                <p class="text-xs text-slate-500">Pencatatan iuran kas mingguan / per-pertemuan.</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-semibold text-slate-500">Tarif Default:</span>
+                                <input type="number" id="kas-rate-input" value="3000" class="w-24 text-right border border-slate-300 rounded-lg px-2 py-1 text-xs font-semibold focus:ring-2 focus:ring-sky-500">
+                                <span class="text-xs text-slate-500">/ Pertemuan</span>
+                            </div>
+                        </div>
+
+                        <!-- Filter Date / Month for Kas -->
+                        <div class="flex items-center justify-between gap-3 bg-slate-50 p-3 rounded-xl">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-day text-sky-600"></i>
+                                <span class="text-xs font-semibold text-slate-700">Tanggal Pertemuan:</span>
+                            </div>
+                            <input type="date" id="kas-date-input" onchange="loadKasForDate()" class="border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-sky-500">
+                        </div>
+
+                        <!-- List Members Kas Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm whitespace-nowrap">
+                                <thead class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase">
+                                    <tr>
+                                        <th class="p-3 rounded-l-lg">Nama</th>
+                                        <th class="p-3">Status Kas</th>
+                                        <th class="p-3">Nominal (Rp)</th>
+                                        <th class="p-3 text-right rounded-r-lg">Aksi Cepat</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kas-table-body" class="divide-y divide-slate-100">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 flex justify-end">
+                            <button onclick="saveKasSession()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center gap-2">
+                                <i class="fa-solid fa-check"></i> Simpan Catatan Kas
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Form Pengeluaran Kas & Ringkasan -->
+                    <div class="space-y-6">
+                        <!-- Form Tambah Pengeluaran -->
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-minus-circle text-rose-500"></i> Catat Pengeluaran Kas
+                            </h3>
+                            <p class="text-xs text-slate-500">Gunakan kas untuk perlengkapan, konsumsi, dll.</p>
+
+                            <form id="form-pengeluaran" onsubmit="handleTambahPengeluaran(event)" class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan / Keperluan</label>
+                                    <input type="text" id="exp-desc" placeholder="Contoh: Beli Air Mineral Tanding" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Nominal (Rp)</label>
+                                    <input type="number" id="exp-amount" placeholder="25000" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Pengeluaran</label>
+                                    <input type="date" id="exp-date" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                                </div>
+                                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> Tambah Pengeluaran
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- History Pengeluaran Terakhir -->
+                        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider">Riwayat Pengeluaran</h4>
+                                <button id="btn-reset-pengeluaran" onclick="resetPengeluaran()" class="text-[10px] bg-rose-50 text-rose-600 hover:bg-rose-100 font-semibold px-2 py-1 rounded border border-rose-200 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-trash"></i> Reset
+                                </button>
+                            </div>
+                            <div id="expense-history-list" class="space-y-2.5 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANGGOTA VIEW -->
+            <section id="view-anggota" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800"> Anggota Eskul</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Daftar seluruh anggota, statistik fisik (BB/TB), dan keahlian.</p>
+                        </div>
+                        <button onclick="openModalMember()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-user-plus"></i> Tambah Anggota Baru
+                        </button>
+                    </div>
+
+                    <!-- Search & Filter Bar -->
+                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <div class="relative w-full sm:w-72">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="search-anggota" onkeyup="renderAnggotaTable()" placeholder="Cari nama, kelas, atau skill..." class="w-full border border-slate-300 rounded-xl pl-9 pr-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <span id="member-count-badge" class="text-xs text-slate-500 font-medium">Menampilkan 0 Anggota</span>
+                    </div>
+
+                    <!-- Member Table -->
+                    <div class="mt-4 overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase">
+                                <tr>
+                                    <th class="p-3.5 rounded-l-xl">No</th>
+                                    <th class="p-3.5">Nama Lengkap</th>
+                                    <th class="p-3.5">Kelas</th>
+                                    <th class="p-3.5">Fisik (BB / TB)</th>
+                                    <th class="p-3.5">Skill Utama</th>
+                                    <th class="p-3.5">Status Eskul</th>
+                                    <th class="p-3.5 text-right rounded-r-xl">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="anggota-table-body" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MATERI & KURIKULUM VIEW (KHUSUS PELATIH & SENIOR) -->
+            <section id="view-materi" class="hidden space-y-6">
+                <!-- Progress Header -->
+                <div class="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs font-semibold text-sky-400 uppercase tracking-widest">Modul Pelatih</span>
+                            <h2 class="text-2xl font-bold mt-0.5">Materi Latihan</h2>
+                            <p class="text-xs text-slate-300 mt-1">Masukan Materi setiap latihan, sebagai reminder senior!</p>
+                        </div>
+                        <button onclick="openModalMateri()" class="self-start md:self-auto bg-sky-500 hover:bg-sky-400 text-white font-semibold px-4 py-2.5 rounded-xl transition shadow text-xs sm:text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-plus-circle"></i> Tambah Materi Baru
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar Component -->
+                    <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700/60 space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-200">Progres Materi</span>
+                            <span id="materi-progress-percent" class="font-bold text-sky-400">0% Tuntas</span>
+                        </div>
+                        <div class="w-full bg-slate-700 h-3 rounded-full overflow-hidden">
+                            <div id="materi-progress-bar" class="bg-gradient-to-r from-sky-500 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="flex justify-between text-[11px] text-slate-400 pt-1">
+                            <span id="materi-count-finished">0 Sudah Dipelajari</span>
+                            <span id="materi-count-total">Total 0 Materi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter & List Materi -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-full sm:w-auto overflow-x-auto text-xs font-semibold">
+                            <button onclick="filterMateriView('semua')" id="btn-filter-materi-semua" class="filter-mat-btn px-3 py-1.5 rounded-lg bg-white shadow text-sky-600">Semua</button>
+                            <button onclick="filterMateriView('Sudah Dipelajari')" id="btn-filter-materi-sudah" class="filter-mat-btn px-3 py-1.5 rounded-lg text-slate-600 hover:bg-white/60">Sudah Dipelajari</button>
+                            <button onclick="filterMateriView('Dalam Proses')" id="btn-filter-materi-proses" class="filter-mat-btn px-3 py-1.5 rounded-lg text-slate-600 hover:bg-white/60">Dalam Proses</button>
+                            <button onclick="filterMateriView('Belum Dipelajari')" id="btn-filter-materi-belum" class="filter-mat-btn px-3 py-1.5 rounded-lg text-slate-600 hover:bg-white/60">Belum Dipelajari</button>
+                        </div>
+                    </div>
+
+                    <!-- Materi Cards Grid -->
+                    <div id="materi-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- REKAP VIEW -->
+            <section id="view-rekap" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">Rekap Absenssi</h2>
+                            <p class="text-xs text-slate-500">persentase kehadiran dan total kas masuk per siswa. Rekap setiap bulan dan catat ke buku absen!</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="btn-reset-absensi-rekap" onclick="resetAbsensi()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-sm transition border border-rose-200 flex items-center gap-1.5">
+                                <i class="fa-solid fa-trash-can"></i> Reset Presensi
+                            </button>
+                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+                                <i class="fa-solid fa-file-excel"></i> Export CSV / Excel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-100 text-slate-700 text-xs font-semibold uppercase">
+                                <tr>
+                                    <th class="p-3.5 rounded-l-xl">Nama Siswa</th>
+                                    <th class="p-3.5">Kelas</th>
+                                    <th class="p-3.5 text-center">Total Hadir</th>
+                                    <th class="p-3.5 text-center">Izin / Sakit</th>
+                                    <th class="p-3.5 text-center">Alpa</th>
+                                    <th class="p-3.5 text-center rounded-r-xl">% Kehadiran</th>
+                                    <!-- Sembunyikan Kolom Kas -->
+                                    <th class="hidden p-3.5 text-right rounded-r-xl">Total Kas Terbayar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rekap-table-body" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PENGGUNA SENIOR VIEW -->
+            <section id="view-pengguna" class="hidden space-y-6">
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">Kelola Akun Senior / Asisten</h2>
+                            <p class="text-xs text-slate-500">Buat dan kelola PIN akses untuk senior yang diperbolehkan membantu mengabsen.</p>
+                        </div>
+                        <button id="btn-add-senior" onclick="openModalSenior()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield"></i> Buat Akun Senior
+                        </button>
+                    </div>
+
+                    <!-- Information Notice -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                        <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
+                        <div class="text-xs text-amber-800 leading-relaxed">
+                            <span class="font-bold">Hak Akses:</span> Pelatih Utama dapat membuat PIN khusus untuk Senior tertentu. Senior yang login menggunakan PIN tersebut dapat membantu melakukan presensi dan mencatatkan pembayaran kas.
+                        </div>
+                    </div>
+
+                    <!-- Senior List Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase">
+                                <tr>
+                                    <th class="p-3.5 rounded-l-xl">Nama Senior</th>
+                                    <th class="p-3.5">Username / Kode</th>
+                                    <th class="p-3.5">PIN Akses</th>
+                                    <th class="p-3.5">Peran</th>
+                                    <th class="p-3.5 text-right rounded-r-xl">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="senior-table-body" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL ANGGOTA (ADD / EDIT) -->
+    <div id="modal-anggota" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modal-anggota-title" class="text-lg font-bold text-slate-800">Tambah Anggota Baru</h3>
+                <button onclick="closeModalMember()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="form-anggota" onsubmit="handleSaveMember(event)" class="space-y-4">
+                <input type="hidden" id="member-id">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap Siswa</label>
+                    <input type="text" id="member-name" required placeholder="Contoh: Assyam Balqis" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Kelas Sekolah & Tanding</label>
+                    <input type="text" id="member-class" required placeholder="Contoh: 7,3 (kelas b)" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+
+                <!-- Physical Stats Inputs -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Berat Badan (kg)</label>
+                        <input type="number" step="0.1" id="member-weight" placeholder="60" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tinggi Badan (cm)</label>
+                        <input type="number" step="0.1" id="member-height" placeholder="170" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Keahlian utama</label>
+                    <input type="text" id="member-skills" placeholder="Contoh: Speed, Akurasi Serangan" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                    <p class="text-[10px] text-slate-400 mt-1">Pisahkan skill dengan koma.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor WhatsApp (Opsional)</label>
+                    <input type="tel" id="member-phone" placeholder="081234567890" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Status Keanggotaan</label>
+                    <select id="member-status" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Non-Aktif">Non-Aktif</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModalMember()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-4 py-2 rounded-xl text-xs shadow transition">Simpan Anggota</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL ANGGOTA -->
+    <div id="modal-detail-anggota" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-500 text-white font-bold text-xl flex items-center justify-center shadow-lg shadow-sky-500/30">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <h3 id="detail-member-name" class="text-lg font-bold text-slate-800">Nama Siswa</h3>
+                        <p id="detail-member-class" class="text-xs text-slate-500 font-medium">Kelas</p>
+                    </div>
+                </div>
+                <button onclick="closeModalDetailMember()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Stats Grid (Physical & BMI) -->
+            <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl text-center border border-slate-100">
+                <div>
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase">Berat</span>
+                    <p id="detail-member-weight" class="text-sm font-bold text-slate-800 mt-0.5">-</p>
+                </div>
+                <div>
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase">Tinggi</span>
+                    <p id="detail-member-height" class="text-sm font-bold text-slate-800 mt-0.5">-</p>
+                </div>
+                <div>
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase">Indeks BMI</span>
+                    <p id="detail-member-bmi" class="text-xs font-bold text-sky-600 mt-0.5">-</p>
+                </div>
+            </div>
+
+            <!-- Skills List -->
+            <div>
+                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Skill & Keahlian</h4>
+                <div id="detail-member-skills-list" class="flex flex-wrap gap-1.5">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Contact & Status -->
+            <div class="pt-2 border-t border-slate-100 text-xs space-y-2 text-slate-600">
+                <div class="flex justify-between">
+                    <span>WhatsApp / HP:</span>
+                    <span id="detail-member-phone" class="font-mono font-semibold text-slate-800">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Status Eskul:</span>
+                    <span id="detail-member-status" class="font-bold text-emerald-600">Aktif</span>
+                </div>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+                <button onclick="closeModalDetailMember()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2 rounded-xl text-xs transition">Tutup Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MATERI (ADD / EDIT) -->
+    <div id="modal-materi" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center mb-2">
+                <h3 id="modal-materi-title" class="text-lg font-bold text-slate-800">Tambah Materi Eskul</h3>
+                <button onclick="closeModalMateri()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="form-materi" onsubmit="handleSaveMateri(event)" class="space-y-4">
+                <input type="hidden" id="materi-id">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Judul Materi / Teknik</label>
+                    <input type="text" id="materi-title" required placeholder="Contoh: Teknik Dasar Passing Bawah" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Kategori Tingkat</label>
+                        <select id="materi-category" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                            <option value="Dasar">Dasar (Basic)</option>
+                            <option value="Menengah">Menengah (Intermediate)</option>
+                            <option value="Lanjutan">Lanjutan (Advanced)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Status Pembelajaran</label>
+                        <select id="materi-status-input" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                            <option value="Belum Dipelajari">Belum Dipelajari</option>
+                            <option value="Dalam Proses">Dalam Proses</option>
+                            <option value="Sudah Dipelajari">Sudah Dipelajari</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Target / Tanggal Diberikan</label>
+                    <input type="date" id="materi-date" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan Evaluasi Pelatih</label>
+                    <textarea id="materi-notes" rows="3" placeholder="Contoh: Fokus pada posisi kaki & kuda-kuda " class="w-full border border-slate-300 rounded-xl p-3 text-xs focus:ring-2 focus:ring-sky-500 outline-none custom-scrollbar"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModalMateri()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-4 py-2 rounded-xl text-xs shadow transition">Simpan Materi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SUPABASE SETTINGS -->
+    <div id="modal-supabase" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800">Hubungkan Supabase Cloud</h3>
+                        <p class="text-[11px] text-slate-500">Sinkronisasi data multi-user real-time</p>
+                    </div>
+                </div>
+                <button onclick="closeModalSupabase()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1">
+                <p class="font-bold text-slate-800"><i class="fa-solid fa-circle-info text-emerald-600"></i> Cara Mengambil Kunci Supabase:</p>
+                <ol class="list-decimal pl-4 text-[11px] space-y-0.5 text-slate-600">
+                    <li>Buka dashboard <b>Supabase</b> Anda di Vercel / Supabase.com</li>
+                    <li>Masuk ke <b>Project Settings</b> -> <b>API</b></li>
+                    <li>Salin <b>Project URL</b> & <b>anon public key</b> lalu tempel di bawah ini:</li>
+                </ol>
+            </div>
+
+            <form id="form-supabase" onsubmit="handleSaveSupabaseConfig(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Supabase Project URL</label>
+                    <input type="url" id="supabase-url-input" placeholder="https://xxxx.supabase.co" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 outline-none font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Supabase Anon Key</label>
+                    <input type="password" id="supabase-key-input" placeholder="eyJhbGciOi..." class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 outline-none font-mono">
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <button type="button" onclick="clearSupabaseConfig()" class="text-xs text-rose-600 font-semibold hover:underline">Gunakan LocalStorage Saja</button>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-xl text-xs shadow transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-plug"></i> Simpan & Hubungkan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SENIOR (ADD / EDIT) -->
+    <div id="modal-senior" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-lg font-bold text-slate-800">Buat Akun Senior</h3>
+                <button onclick="closeModalSenior()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="form-senior" onsubmit="handleSaveSenior(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap Senior</label>
+                    <input type="text" id="senior-name" required placeholder="Contoh: Senior Dimas" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Username / Kode Akses</label>
+                    <input type="text" id="senior-username" required placeholder="dimas" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">PIN Akses (4-6 Digit)</label>
+                    <input type="password" id="senior-pin" maxlength="6" required placeholder="1122" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-sky-500 outline-none font-mono">
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModalSenior()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">Batal</button>
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-4 py-2 rounded-xl text-xs shadow transition">Simpan Akun</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Application Logic & Local Storage / Supabase Synchronization -->
+    <script>
+        // ==============================================================================
+        // KREDENSIAL SUPABASE OTOMATIS (AUTO-CONNECT)
+        // ==============================================================================
+        const AUTO_SUPABASE_URL = 'https://mktaltkkrmpmuddxvphz.supabase.co';
+        const AUTO_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rdGFsdGtrcm1wbXVkZHh2cGh6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NzE2NDEsImV4cCI6MjEwMzI0NzY0MX0.0cftehQBNpOacUk6aAJyGcw0Ra9zoBnqe4ainRzBi1w'; 
+
+        const LOCAL_STORAGE_KEY = 'eskul_app_data_v3';
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        // Core state data structure
+        let state = {
+            members: [
+                { id: 'm-1', name: 'Ahmad Fauzi', class: 'X IPA 1', phone: '08123456781', status: 'Aktif', weight: 65, height: 172, skills: 'Smash Power, Servis Atas' },
+                { id: 'm-2', name: 'Bhakti Utama', class: 'X IPS 2', phone: '08123456782', status: 'Aktif', weight: 58, height: 168, skills: 'Defense, Passing Bawah' },
+                { id: 'm-3', name: 'Citra Kirana', class: 'XI IPA 3', phone: '08123456783', status: 'Aktif', weight: 52, height: 160, skills: 'Setting, Agility' },
+                { id: 'm-4', name: 'Dewi Lestari', class: 'XI IPS 1', phone: '08123456784', status: 'Aktif', weight: 55, height: 165, skills: 'Blocking, Servis Presisi' }
+            ],
+            attendance: {},
+            kas: {},
+            expenses: [],
+            akumulasiPengeluaran: 0,
+            seniors: [
+                { id: 'sn-1', name: 'Senior Dimas', username: 'dimas', pin: '1122' }
+            ],
+            materi: [
+                { id: 'mat-1', title: 'Teknik Dasar Passing & Control', category: 'Dasar', status: 'Sudah Dipelajari', date: '2026-08-10', notes: 'Semua anggota aktif sudah lulus evaluasi passing 10x tanpa jatuh.' },
+                { id: 'mat-2', title: 'Formasi Pertahanan 3-3 & Transisi', category: 'Menengah', status: 'Dalam Proses', date: '2026-08-20', notes: 'Perlu pengulangan untuk koordinasi rotasi posisi.' },
+                { id: 'mat-3', title: 'Strategi Counter Attack & Jump Serve', category: 'Lanjutan', status: 'Belum Dipelajari', date: '2026-09-05', notes: 'Dijadwalkan setelah fisik & tinggi lompatan memenuhi standar.' }
+            ],
+            coachPin: '123456',
+            supabaseUrl: AUTO_SUPABASE_URL,
+            supabaseKey: AUTO_SUPABASE_KEY
+        };
+
+        let currentUserRole = 'Pelatih Utama';
+        let currentSeniorData = null;
+        let dashboardChartInstance = null;
+        let supabaseClient = null;
+        let currentMateriFilter = 'semua';
+        
+        // Kunci penyimpanan sesi login (24 jam)
+        const SESSION_KEY = 'eskul_login_session_v3';
+
+        // Load data from LocalStorage
+        function loadLocalData() {
+            try {
+                const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    state = { ...state, ...parsed };
+                    
+                    if (!state.supabaseUrl) state.supabaseUrl = AUTO_SUPABASE_URL;
+                    if (!state.supabaseKey) state.supabaseKey = AUTO_SUPABASE_KEY;
+                }
+            } catch (e) {
+                console.warn("Could not load from localStorage:", e);
+            }
+            initSupabaseClient();
+        }
+
+        function saveLocalData() {
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.warn("Could not save to localStorage:", e);
+            }
+            syncToSupabase();
+        }
+
+        // Supabase Initialization
+        function initSupabaseClient() {
+            if (state.supabaseUrl && state.supabaseKey && window.supabase) {
+                try {
+                    supabaseClient = window.supabase.createClient(state.supabaseUrl, state.supabaseKey);
+                    updateDbStatusIndicator(true);
+                    fetchFromSupabase();
+                    
+                    if (window.self === window.top) {
+                        subscribeToSupabaseRealtime();
+                    } else {
+                        console.warn("Berjalan di Mode Pratinjau Canvas: Live WebSocket dinonaktifkan.");
+                    }
+                } catch (e) {
+                    console.error("Supabase init error:", e);
+                    updateDbStatusIndicator(false);
+                }
+            } else {
+                updateDbStatusIndicator(false);
+            }
+        }
+
+        function updateDbStatusIndicator(isConnected) {
+            const dot = document.getElementById('db-status-dot');
+            const txt = document.getElementById('db-status-text');
+            if (!dot || !txt) return;
+
+            if (isConnected) {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400 mr-2";
+                txt.innerText = "Supabase Live";
+            } else {
+                dot.className = "w-2 h-2 rounded-full bg-amber-400 mr-2 animate-pulse";
+                txt.innerText = "Local Storage";
+            }
+        }
+
+        async function fetchFromSupabase() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('app_state')
+                    .select('data')
+                    .eq('id', 'main_store')
+                    .single();
+
+                if (data && data.data) {
+                    const cloudState = data.data;
+                    state = {
+                        ...state,
+                        ...cloudState,
+                        supabaseUrl: state.supabaseUrl,
+                        supabaseKey: state.supabaseKey
+                    };
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+                    renderAllViews();
+                }
+            } catch (e) {
+                console.warn("Initial Supabase pull note:", e);
+            }
+        }
+
+        function subscribeToSupabaseRealtime() {
+            if (!supabaseClient) return;
+            try {
+                supabaseClient
+                    .channel('public:app_state')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'app_state' }, (payload) => {
+                        if (payload.new && payload.new.data) {
+                            const cloudData = payload.new.data;
+                            state = {
+                                ...state,
+                                ...cloudData,
+                                supabaseUrl: state.supabaseUrl,
+                                supabaseKey: state.supabaseKey
+                            };
+                            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+                            renderAllViews();
+                            showToast("Data diperbarui secara real-time dari Cloud!", "success");
+                        }
+                    })
+                    .subscribe();
+            } catch (e) {
+                console.warn("Realtime subscription error:", e);
+            }
+        }
+
+        async function syncToSupabase() {
+            if (!supabaseClient) return;
+            try {
+                await supabaseClient.from('app_state').upsert({ id: 'main_store', data: state, updated_at: new Date() });
+            } catch (e) {
+                console.warn("Supabase push failed:", e);
+            }
+        }
+
+        window.openModalSupabase = function() {
+            document.getElementById('supabase-url-input').value = state.supabaseUrl || '';
+            document.getElementById('supabase-key-input').value = state.supabaseKey || '';
+            document.getElementById('modal-supabase').classList.remove('hidden');
+        };
+
+        window.closeModalSupabase = function() {
+            document.getElementById('modal-supabase').classList.add('hidden');
+        };
+
+        window.handleSaveSupabaseConfig = async function(e) {
+            e.preventDefault();
+            const url = document.getElementById('supabase-url-input').value.trim();
+            const key = document.getElementById('supabase-key-input').value.trim();
+
+            state.supabaseUrl = url;
+            state.supabaseKey = key;
+            saveLocalData();
+            initSupabaseClient();
+
+            closeModalSupabase();
+            showToast("Konfigurasi Supabase disimpan!", "success");
+        };
+
+        window.clearSupabaseConfig = function() {
+            state.supabaseUrl = '';
+            state.supabaseKey = '';
+            supabaseClient = null;
+            saveLocalData();
+            updateDbStatusIndicator(false);
+            closeModalSupabase();
+            showToast("Kembali ke penyimpanan LocalStorage.", "success");
+        };
+
+        // Navigation & Role Handling
+        window.switchTab = function(tabName) {
+            if (currentUserRole !== 'Pelatih Utama' && tabName === 'pengguna') {
+                tabName = 'dashboard';
+            }
+
+            // 'kas' dihapus dari loop agar class hidden miliknya tidak tereset secara otomatis
+            const tabs = ['dashboard', 'absensi', 'anggota', 'rekap', 'materi', 'pengguna'];
+            tabs.forEach(t => {
+                const view = document.getElementById(`view-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (!view || !btn) return;
+                
+                if (t === tabName) {
+                    view.classList.remove('hidden');
+                    btn.className = "tab-btn active px-4 py-2 rounded-lg font-medium text-xs sm:text-sm flex items-center gap-2 transition bg-sky-600 text-white shadow";
+                } else {
+                    view.classList.add('hidden');
+                    btn.className = "tab-btn px-4 py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition";
+                }
+            });
+
+            if (tabName === 'dashboard') renderDashboard();
+            if (tabName === 'absensi') loadAttendanceForDate();
+            if (tabName === 'kas') loadKasForDate();
+            if (tabName === 'anggota') renderAnggotaTable();
+            if (tabName === 'rekap') renderRekapTable();
+            if (tabName === 'materi') renderMateriSection();
+            if (tabName === 'pengguna') renderSeniorTable();
+
+            applyRolePermissions();
+        };
+
+        window.toggleGateRoleInputs = function() {
+            const role = document.getElementById('gate-role').value;
+            const containerSenior = document.getElementById('gate-container-senior-select');
+            const hintCoach = document.getElementById('hint-text-coach');
+            const hintSenior = document.getElementById('hint-text-senior');
+            
+            if (role === 'Senior') {
+                containerSenior.classList.remove('hidden');
+                hintCoach.classList.add('hidden');
+                hintSenior.classList.remove('hidden');
+
+                const select = document.getElementById('gate-senior-id');
+                select.innerHTML = '';
+                if (state.seniors.length === 0) {
+                    select.innerHTML = `<option value="">Tidak ada akun Senior tersedia</option>`;
+                } else {
+                    state.seniors.forEach(sn => {
+                        select.innerHTML += `<option value="${sn.id}">${sn.name} (${sn.username})</option>`;
+                    });
+                }
+            } else {
+                containerSenior.classList.add('hidden');
+                hintCoach.classList.remove('hidden');
+                hintSenior.classList.add('hidden');
+            }
+        };
+
+        window.togglePinVisibility = function() {
+            const pinInput = document.getElementById('gate-pin');
+            const icon = document.getElementById('pin-toggle-icon');
+            if (pinInput.type === 'password') {
+                pinInput.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                pinInput.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        };
+
+        window.handleGateLogin = function(e) {
+            e.preventDefault();
+            const role = document.getElementById('gate-role').value;
+            const pinEntered = document.getElementById('gate-pin').value.trim();
+            const errBox = document.getElementById('gate-error-msg');
+
+            if (role === 'Pelatih Utama') {
+                if (pinEntered === state.coachPin) {
+                    currentUserRole = 'Pelatih Utama';
+                    currentSeniorData = null;
+                    saveLoginSession();
+                    enterApp(true);
+                } else {
+                    errBox.innerText = "PIN Pelatih Utama salah!";
+                    errBox.classList.remove('hidden');
+                }
+            } else {
+                const seniorId = document.getElementById('gate-senior-id').value;
+                const snObj = state.seniors.find(s => s.id === seniorId);
+                if (snObj && snObj.pin === pinEntered) {
+                    currentUserRole = 'Senior';
+                    currentSeniorData = snObj;
+                    saveLoginSession();
+                    enterApp(true);
+                } else {
+                    errBox.innerText = "PIN Senior yang Anda masukkan salah!";
+                    errBox.classList.remove('hidden');
+                }
+            }
+        };
+
+        function saveLoginSession() {
+            const sessionData = {
+                role: currentUserRole,
+                seniorData: currentSeniorData,
+                timestamp: new Date().getTime()
+            };
+            localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+        }
+
+        function checkLoginSession() {
+            const sessStr = localStorage.getItem(SESSION_KEY);
+            if (sessStr) {
+                try {
+                    const sess = JSON.parse(sessStr);
+                    const now = new Date().getTime();
+                    const oneDay = 24 * 60 * 60 * 1000; 
+                    
+                    if (now - sess.timestamp < oneDay) {
+                        currentUserRole = sess.role;
+                        currentSeniorData = sess.seniorData;
+                        
+                        saveLoginSession(); 
+                        enterApp(false); 
+                        return true;
+                    } else {
+                        localStorage.removeItem(SESSION_KEY);
+                    }
+                } catch(e) {
+                    console.warn("Session error", e);
+                }
+            }
+            return false;
+        }
+
+        function enterApp(showWelcomeMsg = true) {
+            document.getElementById('login-gate').classList.add('hidden');
+            const appContainer = document.getElementById('app-container');
+            appContainer.classList.remove('hidden');
+            appContainer.classList.add('flex');
+
+            updateUserRoleBadge();
+            renderAllViews();
+            
+            if (showWelcomeMsg) {
+                showToast(`Berhasil masuk sebagai ${currentUserRole === 'Pelatih Utama' ? 'Pelatih Utama' : currentSeniorData.name}!`, "success");
+            }
+        }
+
+        window.logoutUser = function() {
+            localStorage.removeItem(SESSION_KEY);
+            document.getElementById('app-container').classList.add('hidden');
+            document.getElementById('app-container').classList.remove('flex');
+            document.getElementById('gate-pin').value = '';
+            document.getElementById('gate-error-msg').classList.add('hidden');
+            document.getElementById('login-gate').classList.remove('hidden');
+            toggleGateRoleInputs();
+        };
+
+        function applyRolePermissions() {
+            const isPelatih = (currentUserRole === 'Pelatih Utama');
+            const badgeRole = document.getElementById('current-user-role');
+            const dashName = document.getElementById('dash-user-name');
+            const tabPengguna = document.getElementById('tab-pengguna');
+            const btnResetPengeluaran = document.getElementById('btn-reset-pengeluaran');
+            const btnResetAbsenDash = document.getElementById('btn-reset-absensi-dash');
+            const btnResetAbsenRekap = document.getElementById('btn-reset-absensi-rekap');
+
+            if (badgeRole) {
+                badgeRole.innerText = isPelatih ? "Pelatih Utama" : `Senior: ${currentSeniorData ? currentSeniorData.name : ''}`;
+            }
+            if (dashName) {
+                dashName.innerText = isPelatih ? "Pelatih" : (currentSeniorData ? currentSeniorData.name : 'Senior');
+            }
+
+            if (tabPengguna) {
+                if (isPelatih) {
+                    tabPengguna.classList.remove('hidden');
+                    tabPengguna.style.display = '';
+                } else {
+                    tabPengguna.classList.add('hidden');
+                    tabPengguna.style.display = 'none';
+                }
+            }
+
+            [btnResetPengeluaran, btnResetAbsenDash, btnResetAbsenRekap].forEach(btn => {
+                if (btn) {
+                    if (isPelatih) {
+                        btn.classList.remove('hidden');
+                        btn.style.display = '';
+                    } else {
+                        btn.classList.add('hidden');
+                        btn.style.display = 'none';
+                    }
+                }
+            });
+        }
+        window.updateUserRoleBadge = applyRolePermissions;
+
+        window.renderAllViews = function() {
+            renderDashboard();
+            loadAttendanceForDate();
+            loadKasForDate();
+            renderAnggotaTable();
+            renderRekapTable();
+            renderMateriSection();
+            renderSeniorTable();
+            applyRolePermissions();
+        };
+
+        function renderDashboard() {
+            const activeMembers = state.members.filter(m => m.status === 'Aktif');
+            document.getElementById('stat-total-anggota').innerText = activeMembers.length;
+
+            const todaySession = state.attendance[todayStr] || {};
+            let presentToday = 0;
+            Object.values(todaySession).forEach(val => {
+                if (val.status === 'Hadir') presentToday++;
+            });
+            document.getElementById('stat-hadir-today').innerText = presentToday;
+            document.getElementById('stat-absensi-date').innerText = `Tanggal ${todayStr}`;
+
+            let totalKasIncome = 0;
+            Object.values(state.kas).forEach(session => {
+                Object.values(session).forEach(item => {
+                    if (item.paid) totalKasIncome += Number(item.amount || 0);
+                });
+            });
+
+            let totalExpense = Number(state.akumulasiPengeluaran) || 0;
+            state.expenses.forEach(exp => {
+                totalExpense += Number(exp.amount || 0);
+            });
+
+            const netKas = totalKasIncome - totalExpense;
+            document.getElementById('stat-total-kas').innerText = `Rp ${netKas.toLocaleString('id-ID')}`;
+            document.getElementById('stat-total-pengeluaran').innerText = `Rp ${totalExpense.toLocaleString('id-ID')}`;
+
+            const logContainer = document.getElementById('dashboard-recent-log');
+            if (!logContainer) return;
+            logContainer.innerHTML = '';
+            
+            const attendanceDates = Object.keys(state.attendance).sort().reverse();
+            if (attendanceDates.length === 0) {
+                logContainer.innerHTML = `<p class="text-xs text-slate-400 italic">Belum ada aktivitas presensi.</p>`;
+            } else {
+                attendanceDates.slice(0, 5).forEach(d => {
+                    const sess = state.attendance[d];
+                    let count = 0;
+                    Object.values(sess).forEach(v => { if (v.status === 'Hadir') count++; });
+                    const div = document.createElement('div');
+                    div.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs";
+                    div.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-sky-600"></i>
+                            <span class="font-bold text-slate-700">${d}</span>
+                        </div>
+                        <span class="font-semibold text-emerald-600">${count} Hadir</span>
+                    `;
+                    logContainer.appendChild(div);
+                });
+            }
+
+            const ctx = document.getElementById('dashboardChart');
+            if (!ctx) return;
+
+            if (dashboardChartInstance) {
+                dashboardChartInstance.destroy();
+            }
+
+            const recent7Days = attendanceDates.slice(0, 7).reverse();
+            const labels = recent7Days.length > 0 ? recent7Days : ['Pertemuan 1', 'Pertemuan 2', 'Pertemuan 3'];
+            const chartData = recent7Days.length > 0 ? recent7Days.map(d => {
+                let count = 0;
+                Object.values(state.attendance[d] || {}).forEach(v => { if (v.status === 'Hadir') count++; });
+                return count;
+            }) : [0, 0, 0];
+
+            if (typeof Chart !== 'undefined') {
+                dashboardChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Jumlah Hadir',
+                            data: chartData,
+                            borderColor: '#0284c7',
+                            backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#0284c7'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                        }
+                    }
+                });
+            }
+        }
+
+        window.loadAttendanceForDate = function() {
+            let selectedDate = document.getElementById('absensi-date-input').value;
+            if (!selectedDate) {
+                selectedDate = todayStr;
+                document.getElementById('absensi-date-input').value = todayStr;
+            }
+
+            const tbody = document.getElementById('attendance-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const currentSession = state.attendance[selectedDate] || {};
+            const activeMembers = state.members.filter(m => m.status === 'Aktif');
+
+            if (activeMembers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-xs text-slate-400">Belum ada anggota aktif. Tambahkan anggota dulu.</td></tr>`;
+                return;
+            }
+
+            // Membangun Dropdown Filter Kelas secara dinamis
+            const classFilter = document.getElementById('filter-class-absensi');
+            const currentFilterVal = classFilter?.value || 'Semua';
+            const uniqueClasses = [...new Set(activeMembers.map(m => m.class))].sort();
+            
+            if (classFilter) {
+                let classOptions = `<option value="Semua">Semua Kelas</option>`;
+                uniqueClasses.forEach(c => {
+                    classOptions += `<option value="${c}" ${currentFilterVal === c ? 'selected' : ''}>Kelas ${c}</option>`;
+                });
+                classFilter.innerHTML = classOptions;
+            }
+
+            activeMembers.forEach((m, idx) => {
+                const record = currentSession[m.id] || { status: 'Hadir', note: '' };
+                const st = record.status;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition absensi-row";
+                tr.setAttribute('data-name', m.name);
+                tr.setAttribute('data-class', m.class);
+                
+                tr.innerHTML = `
+                    <td class="p-3.5 text-xs text-slate-500 font-medium">${idx + 1}</td>
+                    <td class="p-3.5 font-bold text-slate-800 text-xs">${m.name}</td>
+                    <td class="p-3.5 text-xs text-slate-600">${m.class}</td>
+                    <td class="p-3.5 text-center">
+                        <div class="flex items-center justify-center gap-1 sm:gap-1.5">
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Hadir')" id="btn-H-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Hadir' ? 'bg-emerald-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">H</button>
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Izin')" id="btn-I-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Izin' ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">I</button>
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Sakit')" id="btn-S-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Sakit' ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">S</button>
+                            <button type="button" onclick="changeAttStatus('${m.id}', 'Alpa')" id="btn-A-${m.id}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${st === 'Alpa' ? 'bg-rose-500 text-white shadow-md' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">A</button>
+                            <input type="hidden" id="att-status-${m.id}" value="${st}">
+                        </div>
+                    </td>
+                    <td class="p-3.5">
+                        <input type="text" id="att-note-${m.id}" value="${record.note || ''}" placeholder="Catatan..." class="w-full border border-slate-200 rounded-lg px-3 py-1 text-xs focus:ring-2 focus:ring-sky-500 outline-none">
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('attendance-status-text').innerText = state.attendance[selectedDate] 
+                ? "Tersimpan untuk tanggal ini." 
+                : "Belum disimpan untuk tanggal ini.";
+
+            filterAbsensiTable();
+        };
+
+        window.changeAttStatus = function(id, status) {
+            document.getElementById(`att-status-${id}`).value = status;
+            const statuses = ['Hadir', 'Izin', 'Sakit', 'Alpa'];
+            const labels = { Hadir: 'H', Izin: 'I', Sakit: 'S', Alpa: 'A' };
+            const colors = { 
+                Hadir: 'bg-emerald-500 text-white shadow-md', 
+                Izin: 'bg-amber-500 text-white shadow-md', 
+                Sakit: 'bg-amber-500 text-white shadow-md', 
+                Alpa: 'bg-rose-500 text-white shadow-md' 
+            };
+
+            statuses.forEach(s => {
+                const btn = document.getElementById(`btn-${labels[s]}-${id}`);
+                if (btn) {
+                    if (s === status) {
+                        btn.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition ${colors[s]}`;
+                    } else {
+                        btn.className = `w-7 h-7 sm:w-8 sm:h-8 rounded-lg font-bold text-[10px] sm:text-xs transition bg-slate-100 text-slate-400 hover:bg-slate-200`;
+                    }
+                }
+            });
+        };
+
+        window.filterAbsensiTable = function() {
+            const search = (document.getElementById('search-absensi')?.value || '').toLowerCase();
+            const cls = document.getElementById('filter-class-absensi')?.value || 'Semua';
+            const rows = document.querySelectorAll('.absensi-row');
+
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name').toLowerCase();
+                const rowCls = row.getAttribute('data-class');
+                const matchSearch = name.includes(search);
+                const matchClass = cls === 'Semua' || rowCls === cls;
+
+                if (matchSearch && matchClass) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        };
+
+        window.markAllPresent = function() {
+            const activeMembers = state.members.filter(m => m.status === 'Aktif');
+            activeMembers.forEach(m => {
+                changeAttStatus(m.id, 'Hadir');
+            });
+            showToast("Semua anggota ditandai Hadir.", "success");
+        };
+
+        window.saveAttendanceSession = function() {
+            const date = document.getElementById('absensi-date-input').value;
+            if (!date) return;
+
+            const activeMembers = state.members.filter(m => m.status === 'Aktif');
+            const sessionData = {};
+
+            activeMembers.forEach(m => {
+                const status = document.getElementById(`att-status-${m.id}`)?.value || 'Hadir';
+                const note = document.getElementById(`att-note-${m.id}`)?.value.trim() || '';
+                sessionData[m.id] = { status, note };
+            });
+
+            state.attendance[date] = sessionData;
+            saveLocalData();
+            showToast(`Presensi tanggal ${date} berhasil disimpan!`, "success");
+            loadAttendanceForDate();
+            renderDashboard();
+        };
+
+        window.loadKasForDate = function() {
+            let selectedDate = document.getElementById('kas-date-input').value;
+            if (!selectedDate) {
+                selectedDate = todayStr;
+                document.getElementById('kas-date-input').value = todayStr;
+            }
+
+            const tbody = document.getElementById('kas-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const rate = Number(document.getElementById('kas-rate-input').value) || 5000;
+            const kasSession = state.kas[selectedDate] || {};
+            const activeMembers = state.members.filter(m => m.status === 'Aktif');
+
+            if (activeMembers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-xs text-slate-400">Belum ada anggota aktif.</td></tr>`;
+                renderExpenseHistory();
+                return;
+            }
+
+            activeMembers.forEach(m => {
+                const record = kasSession[m.id] || { paid: false, amount: rate };
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition text-xs";
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-slate-800">${m.name}</td>
+                    <td class="p-3">
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold ${record.paid ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
+                            ${record.paid ? 'Lunas' : 'Belum Bayar'}
+                        </span>
+                    </td>
+                    <td class="p-3">
+                        <input type="number" id="kas-amt-${m.id}" value="${record.amount || rate}" class="w-24 border border-slate-300 rounded-lg px-2 py-1 text-xs font-semibold focus:ring-2 focus:ring-sky-500">
+                    </td>
+                    <td class="p-3 text-right">
+                        <button onclick="quickToggleKas('${m.id}', ${!record.paid})" class="px-3 py-1 rounded-lg text-xs font-semibold transition ${record.paid ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' : 'bg-emerald-600 text-white hover:bg-emerald-700'}">
+                            ${record.paid ? 'Batalkan' : 'Tandai Lunas'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            renderExpenseHistory();
+        };
+
+        window.quickToggleKas = function(memberId, newStatus) {
+            const date = document.getElementById('kas-date-input').value || todayStr;
+            const rate = Number(document.getElementById('kas-rate-input').value) || 5000;
+            const amt = Number(document.getElementById(`kas-amt-${memberId}`)?.value) || rate;
+
+            if (!state.kas[date]) state.kas[date] = {};
+            state.kas[date][memberId] = { paid: newStatus, amount: amt };
+
+            saveLocalData();
+            loadKasForDate();
+            renderDashboard();
+        };
+
+        window.saveKasSession = function() {
+            const date = document.getElementById('kas-date-input').value || todayStr;
+            const activeMembers = state.members.filter(m => m.status === 'Aktif');
+
+            if (!state.kas[date]) state.kas[date] = {};
+
+            activeMembers.forEach(m => {
+                const amt = Number(document.getElementById(`kas-amt-${m.id}`)?.value) || 5000;
+                const prev = state.kas[date][m.id] ? state.kas[date][m.id].paid : false;
+                state.kas[date][m.id] = { paid: prev, amount: amt };
+            });
+
+            saveLocalData();
+            showToast("Catatan kas berhasil disimpan!", "success");
+            renderDashboard();
+        };
+
+        window.handleTambahPengeluaran = function(e) {
+            e.preventDefault();
+            const desc = document.getElementById('exp-desc').value.trim();
+            const amount = Number(document.getElementById('exp-amount').value);
+            const date = document.getElementById('exp-date').value;
+
+            if (!desc || !amount || !date) return;
+
+            state.expenses.push({ id: 'exp-' + Date.now(), desc, amount, date });
+            saveLocalData();
+
+            document.getElementById('form-pengeluaran').reset();
+            document.getElementById('exp-date').value = todayStr;
+
+            showToast("Pengeluaran kas tercatat!", "success");
+            renderExpenseHistory();
+            renderDashboard();
+        };
+
+        function renderExpenseHistory() {
+            const container = document.getElementById('expense-history-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const sorted = [...state.expenses].reverse();
+            if (sorted.length === 0) {
+                container.innerHTML = `<div class="text-xs text-slate-400 text-center py-4">Belum ada catatan pengeluaran.</div>`;
+                return;
+            }
+
+            sorted.slice(0, 10).forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-xs";
+                div.innerHTML = `
+                    <div>
+                        <p class="font-bold text-slate-700">${item.desc}</p>
+                        <p class="text-[10px] text-slate-400">${item.date}</p>
+                    </div>
+                    <span class="font-bold text-rose-600">- Rp ${Number(item.amount).toLocaleString('id-ID')}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.resetPengeluaran = function() {
+            if (currentUserRole !== 'Pelatih Utama') {
+                showToast("Akses ditolak: Hanya Pelatih Utama yang dapat mereset pengeluaran.", "error");
+                return;
+            }
+
+            if (confirm("Apakah Anda yakin ingin menghapus SEMUA riwayat pengeluaran?\n\nSaldo kas bersih akan otomatis bertambah kembali. Data yang dihapus tidak bisa dikembalikan.")) {
+                state.expenses = [];
+                state.akumulasiPengeluaran = 0; // Mereset nilai akumulasi yang tersembunyi
+                saveLocalData(); 
+                showToast("Riwayat pengeluaran berhasil dikosongkan!", "success");
+                renderExpenseHistory();
+                renderDashboard();
+            }
+        };
+
+        window.resetAbsensi = function() {
+            if (currentUserRole !== 'Pelatih Utama') {
+                showToast("Akses ditolak: Hanya Pelatih Utama yang dapat mereset data absensi.", "error");
+                return;
+            }
+
+            if (confirm("Yakin ingin menghapus SEMUA data Aktivitas & Presensi Kehadiran?\n\n* Pastikan Anda sudah Export CSV/Excel untuk rekap bulan ini sebelum menghapus.\n* Data yang dihapus tidak dapat dikembalikan!")) {
+                state.attendance = {};
+                saveLocalData(); 
+                showToast("Data presensi dan aktivitas berhasil dikosongkan!", "success");
+                renderDashboard();
+                loadAttendanceForDate();
+                renderRekapTable();
+            }
+        };
+
+        window.renderAnggotaTable = function() {
+            const tbody = document.getElementById('anggota-table-body');
+            if (!tbody) return;
+            const searchKey = (document.getElementById('search-anggota')?.value || '').toLowerCase();
+            tbody.innerHTML = '';
+
+            const filtered = state.members.filter(m => 
+                m.name.toLowerCase().includes(searchKey) || 
+                m.class.toLowerCase().includes(searchKey) ||
+                (m.skills && m.skills.toLowerCase().includes(searchKey))
+            );
+
+            document.getElementById('member-count-badge').innerText = `Menampilkan ${filtered.length} Anggota`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-xs text-slate-400">Tidak ada anggota ditemukan.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach((m, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="p-3.5 text-xs text-slate-500 font-medium">${idx + 1}</td>
+                    <td class="p-3.5 font-bold text-slate-800 text-xs">
+                        <button onclick="showMemberDetail('${m.id}')" class="text-left hover:text-sky-600 font-bold flex items-center gap-1.5">
+                            ${m.name} <i class="fa-solid fa-circle-info text-slate-400 text-[10px]"></i>
+                        </button>
+                    </td>
+                    <td class="p-3.5 text-xs text-slate-600">${m.class}</td>
+                    <td class="p-3.5 text-xs font-mono text-slate-700">${m.weight ? m.weight + ' kg' : '-'} / ${m.height ? m.height + ' cm' : '-'}</td>
+                    <td class="p-3.5 text-xs">
+                        <span class="bg-sky-50 text-sky-700 px-2 py-0.5 rounded-md text-[11px] font-medium border border-sky-100 max-w-[150px] truncate block" title="${m.skills || 'Belum diisi'}">
+                            ${m.skills || 'Belum diisi'}
+                        </span>
+                    </td>
+                    <td class="p-3.5 text-xs">
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold ${m.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
+                            ${m.status}
+                        </span>
+                    </td>
+                    <td class="p-3.5 text-right space-x-1">
+                        <button onclick="showMemberDetail('${m.id}')" class="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg text-xs transition" title="Lihat Detail"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="editMember('${m.id}')" class="text-sky-600 hover:bg-sky-50 p-2 rounded-lg text-xs transition" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        ${currentUserRole === 'Pelatih Utama' ? `<button onclick="deleteMember('${m.id}')" class="text-rose-600 hover:bg-rose-50 p-2 rounded-lg text-xs transition" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.showMemberDetail = function(id) {
+            const m = state.members.find(x => x.id === id);
+            if (!m) return;
+
+            document.getElementById('detail-member-name').innerText = m.name;
+            document.getElementById('detail-member-class').innerText = `Kelas ${m.class}`;
+            document.getElementById('detail-member-weight').innerText = m.weight ? `${m.weight} kg` : '-';
+            document.getElementById('detail-member-height').innerText = m.height ? `${m.height} cm` : '-';
+            document.getElementById('detail-member-phone').innerText = m.phone || '-';
+            document.getElementById('detail-member-status').innerText = m.status;
+
+            if (m.weight && m.height) {
+                const heightInMeters = m.height / 100;
+                const bmi = (m.weight / (heightInMeters * heightInMeters)).toFixed(1);
+                let cat = "Normal";
+                if (bmi < 18.5) cat = "Kurus";
+                else if (bmi >= 25) cat = "Berlebih";
+                document.getElementById('detail-member-bmi').innerText = `${bmi} (${cat})`;
+            } else {
+                document.getElementById('detail-member-bmi').innerText = '-';
+            }
+
+            const skillsContainer = document.getElementById('detail-member-skills-list');
+            skillsContainer.innerHTML = '';
+            if (m.skills) {
+                const arr = m.skills.split(',');
+                arr.forEach(sk => {
+                    skillsContainer.innerHTML += `<span class="bg-sky-100 text-sky-800 font-semibold px-2.5 py-1 rounded-lg text-xs">${sk.trim()}</span>`;
+                });
+            } else {
+                skillsContainer.innerHTML = `<span class="text-xs text-slate-400 italic">Belum ada catatan skill.</span>`;
+            }
+
+            document.getElementById('modal-detail-anggota').classList.remove('hidden');
+        };
+
+        window.closeModalDetailMember = function() {
+            document.getElementById('modal-detail-anggota').classList.add('hidden');
+        };
+
+        window.openModalMember = function() {
+            document.getElementById('form-anggota').reset();
+            document.getElementById('member-id').value = '';
+            document.getElementById('modal-anggota-title').innerText = "Tambah Anggota Baru";
+            document.getElementById('modal-anggota').classList.remove('hidden');
+        };
+
+        window.closeModalMember = function() {
+            document.getElementById('modal-anggota').classList.add('hidden');
+        };
+
+        window.editMember = function(id) {
+            const m = state.members.find(x => x.id === id);
+            if (!m) return;
+
+            document.getElementById('member-id').value = m.id;
+            document.getElementById('member-name').value = m.name;
+            document.getElementById('member-class').value = m.class;
+            document.getElementById('member-weight').value = m.weight || '';
+            document.getElementById('member-height').value = m.height || '';
+            document.getElementById('member-skills').value = m.skills || '';
+            document.getElementById('member-phone').value = m.phone || '';
+            document.getElementById('member-status').value = m.status || 'Aktif';
+            
+            document.getElementById('modal-anggota-title').innerText = "Edit Data Anggota";
+            document.getElementById('modal-anggota').classList.remove('hidden');
+        };
+
+        window.handleSaveMember = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('member-id').value || 'm-' + Date.now();
+            const memberObj = {
+                id,
+                name: document.getElementById('member-name').value.trim(),
+                class: document.getElementById('member-class').value.trim(),
+                weight: Number(document.getElementById('member-weight').value) || null,
+                height: Number(document.getElementById('member-height').value) || null,
+                skills: document.getElementById('member-skills').value.trim(),
+                phone: document.getElementById('member-phone').value.trim(),
+                status: document.getElementById('member-status').value
+            };
+
+            const existingIdx = state.members.findIndex(x => x.id === id);
+            if (existingIdx >= 0) {
+                state.members[existingIdx] = memberObj;
+            } else {
+                state.members.push(memberObj);
+            }
+
+            saveLocalData();
+            closeModalMember();
+            showToast("Data anggota berhasil disimpan!", "success");
+            renderAnggotaTable();
+            renderDashboard();
+        };
+
+        window.deleteMember = function(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus data anggota ini?")) {
+                state.members = state.members.filter(x => x.id !== id);
+                saveLocalData();
+                showToast("Anggota berhasil dihapus.", "success");
+                renderAnggotaTable();
+                renderDashboard();
+            }
+        };
+
+        window.renderMateriSection = function() {
+            const container = document.getElementById('materi-cards-container');
+            if (!container) return;
+
+            const totalMateri = state.materi.length;
+            const finishedMateri = state.materi.filter(m => m.status === 'Sudah Dipelajari').length;
+            const pct = totalMateri > 0 ? Math.round((finishedMateri / totalMateri) * 100) : 0;
+
+            document.getElementById('materi-progress-percent').innerText = `${pct}% Tuntas`;
+            document.getElementById('materi-progress-bar').style.width = `${pct}%`;
+            document.getElementById('materi-count-finished').innerText = `${finishedMateri} Sudah Dipelajari`;
+            document.getElementById('materi-count-total').innerText = `Total ${totalMateri} Materi`;
+
+            container.innerHTML = '';
+
+            let filteredList = state.materi;
+            if (currentMateriFilter !== 'semua') {
+                filteredList = state.materi.filter(m => m.status === currentMateriFilter);
+            }
+
+            if (filteredList.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-10 text-xs text-slate-400">Belum ada materi untuk kategori ini.</div>`;
+                return;
+            }
+
+            filteredList.forEach(item => {
+                let badgeClass = "bg-rose-50 text-rose-700 border-rose-200";
+                if (item.status === 'Sudah Dipelajari') badgeClass = "bg-emerald-50 text-emerald-700 border-emerald-200";
+                if (item.status === 'Dalam Proses') badgeClass = "bg-amber-50 text-amber-700 border-amber-200";
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition space-y-3";
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700">${item.category || 'Umum'}</span>
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${badgeClass}">${item.status}</span>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-sm leading-snug">${item.title}</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed bg-white p-3 rounded-xl border border-slate-100">${item.notes || 'Belum ada catatan evaluasi.'}</p>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                        <span class="text-[11px] text-slate-400"><i class="fa-solid fa-calendar text-slate-400 mr-1"></i> ${item.date || '-'}</span>
+                        <div class="flex items-center gap-1">
+                            <button onclick="toggleMateriStatus('${item.id}')" class="bg-white hover:bg-sky-50 text-sky-700 font-semibold px-2.5 py-1 rounded-lg border border-slate-200 transition text-[11px]" title="Ubah Status Rapidly">
+                                <i class="fa-solid fa-arrows-rotate mr-1"></i> Ubah Status
+                            </button>
+                            ${currentUserRole === 'Pelatih Utama' ? `<button onclick="deleteMateri('${item.id}')" class="text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg transition" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        };
+
+        window.filterMateriView = function(statusKey) {
+            currentMateriFilter = statusKey;
+            ['semua', 'Sudah Dipelajari', 'Dalam Proses', 'Belum Dipelajari'].forEach(st => {
+                const btnKey = st === 'semua' ? 'semua' : st === 'Sudah Dipelajari' ? 'sudah' : st === 'Dalam Proses' ? 'proses' : 'belum';
+                const btn = document.getElementById(`btn-filter-materi-${btnKey}`);
+                if (!btn) return;
+                if (st === statusKey) {
+                    btn.className = "filter-mat-btn px-3 py-1.5 rounded-lg bg-white shadow text-sky-600 font-bold";
+                } else {
+                    btn.className = "filter-mat-btn px-3 py-1.5 rounded-lg text-slate-600 hover:bg-white/60";
+                }
+            });
+            renderMateriSection();
+        };
+
+        window.openModalMateri = function() {
+            document.getElementById('form-materi').reset();
+            document.getElementById('materi-id').value = '';
+            document.getElementById('materi-date').value = todayStr;
+            document.getElementById('modal-materi-title').innerText = "Tambah Materi Eskul";
+            document.getElementById('modal-materi').classList.remove('hidden');
+        };
+
+        window.closeModalMateri = function() {
+            document.getElementById('modal-materi').classList.add('hidden');
+        };
+
+        window.handleSaveMateri = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('materi-id').value || 'mat-' + Date.now();
+            const materiObj = {
+                id,
+                title: document.getElementById('materi-title').value.trim(),
+                category: document.getElementById('materi-category').value,
+                status: document.getElementById('materi-status-input').value,
+                date: document.getElementById('materi-date').value,
+                notes: document.getElementById('materi-notes').value.trim()
+            };
+
+            const idx = state.materi.findIndex(x => x.id === id);
+            if (idx >= 0) {
+                state.materi[idx] = materiObj;
+            } else {
+                state.materi.push(materiObj);
+            }
+
+            saveLocalData();
+            closeModalMateri();
+            showToast("Materi kurikulum disimpan!", "success");
+            renderMateriSection();
+        };
+
+        window.toggleMateriStatus = function(id) {
+            const mat = state.materi.find(x => x.id === id);
+            if (!mat) return;
+
+            if (mat.status === 'Belum Dipelajari') mat.status = 'Dalam Proses';
+            else if (mat.status === 'Dalam Proses') mat.status = 'Sudah Dipelajari';
+            else mat.status = 'Belum Dipelajari';
+
+            saveLocalData();
+            showToast(`Status materi diperbarui: ${mat.status}`, "success");
+            renderMateriSection();
+        };
+
+        window.deleteMateri = function(id) {
+            if (confirm("Hapus materi ini dari kurikulum?")) {
+                state.materi = state.materi.filter(x => x.id !== id);
+                saveLocalData();
+                showToast("Materi dihapus.", "success");
+                renderMateriSection();
+            }
+        };
+
+        window.renderRekapTable = function() {
+            const tbody = document.getElementById('rekap-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const activeMembers = state.members.filter(m => m.status === 'Aktif');
+            if (activeMembers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-xs text-slate-400">Tidak ada data untuk direkap.</td></tr>`;
+                return;
+            }
+
+            const totalSessions = Object.keys(state.attendance).length;
+
+            activeMembers.forEach(m => {
+                let hadir = 0, izin = 0, alpa = 0;
+                Object.values(state.attendance).forEach(session => {
+                    if (session[m.id]) {
+                        const st = session[m.id].status;
+                        if (st === 'Hadir') hadir++;
+                        else if (st === 'Izin' || st === 'Sakit') izin++;
+                        else if (st === 'Alpa') alpa++;
+                    }
+                });
+
+                const pct = totalSessions > 0 ? Math.round((hadir / totalSessions) * 100) : 0;
+
+                let totalPaid = 0;
+                Object.values(state.kas).forEach(kasSession => {
+                    if (kasSession[m.id] && kasSession[m.id].paid) {
+                        totalPaid += Number(kasSession[m.id].amount || 0);
+                    }
+                });
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition text-xs";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-bold text-slate-800">${m.name}</td>
+                    <td class="p-3.5 text-slate-600">${m.class}</td>
+                    <td class="p-3.5 text-center font-semibold text-emerald-600">${hadir}</td>
+                    <td class="p-3.5 text-center font-semibold text-amber-600">${izin}</td>
+                    <td class="p-3.5 text-center font-semibold text-rose-600">${alpa}</td>
+                    <td class="p-3.5 text-center font-bold">
+                        <span class="px-2 py-0.5 rounded-md ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}%</span>
+                    </td>
+                    <td class="hidden p-3.5 text-right font-bold text-sky-700">Rp ${totalPaid.toLocaleString('id-ID')}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.exportToCSV = function() {
+            let csvContent = "data:text/csv;charset=utf-8,Nama Siswa,Kelas,Total Hadir,Izin/Sakit,Alpa,Persentase,Total Kas Terbayar (Rp)\n";
+            
+            const totalSessions = Object.keys(state.attendance).length;
+            state.members.filter(m => m.status === 'Aktif').forEach(m => {
+                let hadir = 0, izin = 0, alpa = 0;
+                Object.values(state.attendance).forEach(session => {
+                    if (session[m.id]) {
+                        const st = session[m.id].status;
+                        if (st === 'Hadir') hadir++;
+                        else if (st === 'Izin' || st === 'Sakit') izin++;
+                        else if (st === 'Alpa') alpa++;
+                    }
+                });
+                const pct = totalSessions > 0 ? Math.round((hadir / totalSessions) * 100) : 0;
+                let totalPaid = 0;
+                Object.values(state.kas).forEach(kasSession => {
+                    if (kasSession[m.id] && kasSession[m.id].paid) {
+                        totalPaid += Number(kasSession[m.id].amount || 0);
+                    }
+                });
+
+                csvContent += `"${m.name}","${m.class}",${hadir},${izin},${alpa},"${pct}%",${totalPaid}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Eskul_${todayStr}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        window.renderSeniorTable = function() {
+            const tbody = document.getElementById('senior-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (state.seniors.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-xs text-slate-400">Belum ada akun Senior yang dibuat.</td></tr>`;
+                return;
+            }
+
+            state.seniors.forEach(sn => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition text-xs";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-bold text-slate-800">${sn.name}</td>
+                    <td class="p-3.5 font-mono text-slate-600">${sn.username}</td>
+                    <td class="p-3.5 font-mono font-bold text-sky-600">${currentUserRole === 'Pelatih Utama' ? sn.pin : '••••'}</td>
+                    <td class="p-3.5"><span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full text-[11px] font-semibold">Senior / Asisten</span></td>
+                    <td class="p-3.5 text-right">
+                        ${currentUserRole === 'Pelatih Utama' ? `<button onclick="deleteSenior('${sn.id}')" class="text-rose-600 hover:bg-rose-50 p-2 rounded-lg transition"><i class="fa-solid fa-trash"></i> Hapus</button>` : '<span class="text-slate-400 italic">No permission</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.openModalSenior = function() {
+            if (currentUserRole !== 'Pelatih Utama') {
+                showToast("Hanya Pelatih Utama yang bisa membuat akun Senior!", "error");
+                return;
+            }
+            document.getElementById('form-senior').reset();
+            document.getElementById('modal-senior').classList.remove('hidden');
+        };
+
+        window.closeModalSenior = function() {
+            document.getElementById('modal-senior').classList.add('hidden');
+        };
+
+        window.handleSaveSenior = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('senior-name').value.trim();
+            const username = document.getElementById('senior-username').value.trim();
+            const pin = document.getElementById('senior-pin').value.trim();
+
+            const newSenior = { id: 'sn-' + Date.now(), name, username, pin };
+            state.seniors.push(newSenior);
+            saveLocalData();
+
+            closeModalSenior();
+            showToast("Akun Senior berhasil dibuat!", "success");
+            renderSeniorTable();
+        };
+
+        window.deleteSenior = function(id) {
+            if (confirm("Hapus akun senior ini?")) {
+                state.seniors = state.seniors.filter(s => s.id !== id);
+                saveLocalData();
+                showToast("Akun senior dihapus.", "success");
+                renderSeniorTable();
+            }
+        };
+
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+            toast.className = `${bgColor} text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 text-xs font-semibold pointer-events-auto transform transition duration-300 translate-y-2 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLocalData();
+            document.getElementById('exp-date').value = todayStr;
+            toggleGateRoleInputs();
+            
+            checkLoginSession(); 
+        });
+    </script>
+</body>
+</html>
