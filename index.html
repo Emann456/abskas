@@ -466,24 +466,21 @@
                         <span id="member-count-badge" class="text-xs text-slate-500 font-medium">Menampilkan 0 Anggota</span>
                     </div>
 
-                    <!-- Member Table -->
-                    <div class="mt-4 overflow-x-auto custom-scrollbar pb-2">
-                        <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-wider">
-                                <tr>
-                                    <th class="px-4 py-4 rounded-l-xl">No</th>
-                                    <th class="px-4 py-4">Nama Lengkap</th>
-                                    <th class="px-4 py-4">Kelas</th>
-                                    <th class="px-4 py-4">Fisik (BB / TB)</th>
-                                    <th class="px-4 py-4">Skill Utama</th>
-                                    <th class="px-4 py-4">Status Eskul</th>
-                                    <th class="px-4 py-4 text-right rounded-r-xl">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="anggota-table-body" class="divide-y divide-slate-100">
-                                <!-- Populated dynamically -->
-                            </tbody>
-                        </table>
+                    <!-- Member List (Mobile Optimized Cards) -->
+                    <div class="mt-5">
+                        <!-- List Header (Hidden on Mobile) -->
+                        <div class="hidden md:grid grid-cols-12 gap-4 bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-xl p-4 mb-3 border border-slate-100 items-center">
+                            <div class="col-span-1 pl-2">No</div>
+                            <div class="col-span-3">Nama Lengkap</div>
+                            <div class="col-span-2">Kelas</div>
+                            <div class="col-span-2">Fisik (BB/TB)</div>
+                            <div class="col-span-2">Skill Utama</div>
+                            <div class="col-span-2 text-right">Aksi</div>
+                        </div>
+                        
+                        <div id="anggota-list-container" class="space-y-4 md:space-y-2">
+                            <!-- Populated dynamically -->
+                        </div>
                     </div>
                 </div>
             </section>
@@ -555,25 +552,21 @@
                         </div>
                     </div>
 
-                    <!-- Summary Table -->
-                    <div class="overflow-x-auto custom-scrollbar pb-2">
-                        <table class="w-full text-left text-sm whitespace-nowrap">
-                            <thead class="bg-slate-50 text-slate-700 text-xs font-bold uppercase tracking-wider">
-                                <tr>
-                                    <th class="px-4 py-4 rounded-l-xl">Nama Siswa</th>
-                                    <th class="px-4 py-4">Kelas</th>
-                                    <th class="px-4 py-4 text-center">Total Hadir</th>
-                                    <th class="px-4 py-4 text-center">Izin / Sakit</th>
-                                    <th class="px-4 py-4 text-center">Alpa</th>
-                                    <th class="px-4 py-4 text-center rounded-r-xl">% Kehadiran</th>
-                                    <!-- Sembunyikan Kolom Kas -->
-                                    <th class="hidden px-4 py-4 text-right rounded-r-xl">Total Kas Terbayar</th>
-                                </tr>
-                            </thead>
-                            <tbody id="rekap-table-body" class="divide-y divide-slate-100">
-                                <!-- Populated dynamically -->
-                            </tbody>
-                        </table>
+                    <!-- Summary List (Mobile Optimized Cards) -->
+                    <div class="mt-2">
+                        <!-- List Header (Hidden on Mobile) -->
+                        <div class="hidden md:grid grid-cols-12 gap-4 bg-slate-50 text-slate-700 text-[11px] font-bold uppercase tracking-wider rounded-xl p-4 mb-3 border border-slate-100 text-center items-center">
+                            <div class="col-span-4 text-left pl-2">Nama Siswa</div>
+                            <div class="col-span-2 text-left">Kelas</div>
+                            <div class="col-span-1">Hadir</div>
+                            <div class="col-span-2">Izin/Sakit</div>
+                            <div class="col-span-1">Alpa</div>
+                            <div class="col-span-2">% Hadir</div>
+                        </div>
+                        
+                        <div id="rekap-list-container" class="space-y-4 md:space-y-2">
+                            <!-- Populated dynamically -->
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1277,11 +1270,10 @@
         window.updateUserRoleBadge = applyRolePermissions;
 
         // --- FUNGSI HELPER UNTUK LOGIKA FILTER KELAS ---
-                function getBaseClass(clsString) {
-          if (!clsString) return '';
-          // Mengambil angka pertama yang ditemukan di dalam teks
-          const match = clsString.match(/\d+/);
-          return match ? match[0] : clsString;
+        // Memotong string kelas, contoh: "8 (kelas Z)" -> "8"
+        function getBaseClass(classString) {
+            if (!classString) return '-';
+            return classString.trim().split(' ')[0];
         }
 
         window.renderAllViews = function() {
@@ -1698,10 +1690,10 @@
         };
 
         window.renderAnggotaTable = function() {
-            const tbody = document.getElementById('anggota-table-body');
-            if (!tbody) return;
+            const container = document.getElementById('anggota-list-container');
+            if (!container) return;
             const searchKey = (document.getElementById('search-anggota')?.value || '').toLowerCase();
-            tbody.innerHTML = '';
+            container.innerHTML = '';
 
             const filtered = state.members.filter(m => 
                 m.name.toLowerCase().includes(searchKey) || 
@@ -1712,39 +1704,49 @@
             document.getElementById('member-count-badge').innerText = `Menampilkan ${filtered.length} Anggota`;
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-sm text-slate-400">Tidak ada anggota ditemukan.</td></tr>`;
+                container.innerHTML = `<div class="text-center py-8 text-sm text-slate-400">Tidak ada anggota ditemukan.</div>`;
                 return;
             }
 
             filtered.forEach((m, idx) => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition border-b border-slate-50 last:border-0";
-                tr.innerHTML = `
-                    <td class="px-4 py-4 text-sm text-slate-500 font-medium">${idx + 1}</td>
-                    <td class="px-4 py-4 font-bold text-slate-800 text-sm">
-                        <button onclick="showMemberDetail('${m.id}')" class="text-left hover:text-sky-600 font-bold flex items-center gap-1.5">
-                            ${m.name} <i class="fa-solid fa-circle-info text-slate-400 text-[10px]"></i>
-                        </button>
-                    </td>
-                    <td class="px-4 py-4 text-sm text-slate-600">${m.class}</td>
-                    <td class="px-4 py-4 text-sm font-mono text-slate-700">${m.weight ? m.weight + ' kg' : '-'} / ${m.height ? m.height + ' cm' : '-'}</td>
-                    <td class="px-4 py-4 text-xs">
-                        <span class="bg-sky-50 text-sky-700 px-3 py-1 rounded-lg font-medium border border-sky-100 max-w-[150px] truncate block" title="${m.skills || 'Belum diisi'}">
-                            ${m.skills || 'Belum diisi'}
-                        </span>
-                    </td>
-                    <td class="px-4 py-4 text-xs">
-                        <span class="px-3 py-1.5 rounded-full font-bold ${m.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
+                const div = document.createElement('div');
+                div.className = "bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-3 md:gap-4 transition";
+                div.innerHTML = `
+                    <div class="md:col-span-1 text-sm text-slate-400 font-bold hidden md:block pl-2">${idx + 1}</div>
+                    
+                    <div class="md:col-span-3 flex justify-between items-start md:block border-b border-slate-100 md:border-0 pb-3 md:pb-0">
+                        <div>
+                            <button onclick="showMemberDetail('${m.id}')" class="text-left hover:text-sky-600 font-bold text-slate-800 text-base md:text-sm flex items-center gap-1.5">
+                                ${m.name} <i class="fa-solid fa-circle-info text-slate-400 text-[10px]"></i>
+                            </button>
+                            <div class="text-xs text-slate-500 mt-1 md:hidden">Kelas ${m.class}</div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${m.status === 'Aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'} md:hidden">
                             ${m.status}
                         </span>
-                    </td>
-                    <td class="px-4 py-4 text-right space-x-1 whitespace-nowrap">
-                        <button onclick="showMemberDetail('${m.id}')" class="text-emerald-600 hover:bg-emerald-50 p-2.5 rounded-lg text-sm transition" title="Lihat Detail"><i class="fa-solid fa-eye"></i></button>
-                        <button onclick="editMember('${m.id}')" class="text-sky-600 hover:bg-sky-50 p-2.5 rounded-lg text-sm transition" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                        ${currentUserRole === 'Pelatih Utama' ? `<button onclick="deleteMember('${m.id}')" class="text-rose-600 hover:bg-rose-50 p-2.5 rounded-lg text-sm transition" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
-                    </td>
+                    </div>
+
+                    <div class="md:col-span-2 text-sm text-slate-600 hidden md:block">${m.class}</div>
+                    
+                    <div class="md:col-span-2 text-sm font-mono text-slate-700 flex justify-between md:block">
+                        <span class="text-xs text-slate-400 font-sans md:hidden">Fisik:</span>
+                        <span>${m.weight ? m.weight + ' kg' : '-'} / ${m.height ? m.height + ' cm' : '-'}</span>
+                    </div>
+                    
+                    <div class="md:col-span-2 text-xs flex justify-between md:block items-center">
+                        <span class="text-xs text-slate-400 md:hidden">Skill:</span>
+                        <span class="bg-sky-50 text-sky-700 px-2 py-1 rounded-lg font-medium border border-sky-100 max-w-[150px] truncate block text-right md:text-left" title="${m.skills || 'Belum diisi'}">
+                            ${m.skills || 'Belum diisi'}
+                        </span>
+                    </div>
+
+                    <div class="md:col-span-2 flex items-center justify-end gap-2 mt-2 md:mt-0 pt-3 md:pt-0 border-t border-slate-100 md:border-0">
+                        <button onclick="showMemberDetail('${m.id}')" class="flex-1 md:flex-none text-emerald-600 bg-emerald-50 hover:bg-emerald-100 p-2 rounded-lg text-sm transition" title="Lihat Detail"><i class="fa-solid fa-eye"></i></button>
+                        <button onclick="editMember('${m.id}')" class="flex-1 md:flex-none text-sky-600 bg-sky-50 hover:bg-sky-100 p-2 rounded-lg text-sm transition" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        ${currentUserRole === 'Pelatih Utama' ? `<button onclick="deleteMember('${m.id}')" class="flex-1 md:flex-none text-rose-600 bg-rose-50 hover:bg-rose-100 p-2 rounded-lg text-sm transition" title="Hapus"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(div);
             });
         };
 
@@ -1985,13 +1987,13 @@
         };
 
         window.renderRekapTable = function() {
-            const tbody = document.getElementById('rekap-table-body');
-            if (!tbody) return;
-            tbody.innerHTML = '';
+            const container = document.getElementById('rekap-list-container');
+            if (!container) return;
+            container.innerHTML = '';
 
             const activeMembers = state.members.filter(m => m.status === 'Aktif');
             if (activeMembers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-sm text-slate-400">Tidak ada data untuk direkap.</td></tr>`;
+                container.innerHTML = `<div class="text-center py-8 text-sm text-slate-400">Tidak ada data untuk direkap.</div>`;
                 return;
             }
 
@@ -2010,27 +2012,38 @@
 
                 const pct = totalSessions > 0 ? Math.round((hadir / totalSessions) * 100) : 0;
 
-                let totalPaid = 0;
-                Object.values(state.kas).forEach(kasSession => {
-                    if (kasSession[m.id] && kasSession[m.id].paid) {
-                        totalPaid += Number(kasSession[m.id].amount || 0);
-                    }
-                });
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition text-sm border-b border-slate-50 last:border-0";
-                tr.innerHTML = `
-                    <td class="px-4 py-4 font-bold text-slate-800">${m.name}</td>
-                    <td class="px-4 py-4 text-slate-600">${m.class}</td>
-                    <td class="px-4 py-4 text-center font-bold text-emerald-600 text-base">${hadir}</td>
-                    <td class="px-4 py-4 text-center font-bold text-amber-600 text-base">${izin}</td>
-                    <td class="px-4 py-4 text-center font-bold text-rose-600 text-base">${alpa}</td>
-                    <td class="px-4 py-4 text-center font-bold">
-                        <span class="px-3 py-1.5 rounded-lg text-xs ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}%</span>
-                    </td>
-                    <td class="hidden px-4 py-4 text-right font-bold text-sky-700">Rp ${totalPaid.toLocaleString('id-ID')}</td>
+                const div = document.createElement('div');
+                div.className = "bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-4 md:gap-3 transition";
+                div.innerHTML = `
+                    <div class="md:col-span-4 flex justify-between items-start md:block border-b border-slate-100 md:border-0 pb-3 md:pb-0">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-base md:text-sm pl-2">${m.name}</h4>
+                            <div class="text-xs text-slate-500 mt-1 md:hidden pl-2">Kelas ${m.class}</div>
+                        </div>
+                        <span class="px-2.5 py-1.5 rounded-lg text-xs font-bold md:hidden ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}% Hadir</span>
+                    </div>
+                    
+                    <div class="md:col-span-2 text-sm text-slate-600 hidden md:block">${m.class}</div>
+                    
+                    <div class="md:col-span-6 grid grid-cols-3 md:grid-cols-6 gap-2 text-center items-center">
+                        <div class="md:col-span-1 bg-slate-50 md:bg-transparent p-2 md:p-0 rounded-xl md:rounded-none">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase md:hidden mb-1">Hadir</div>
+                            <div class="font-bold text-emerald-600 text-base md:text-sm">${hadir}</div>
+                        </div>
+                        <div class="md:col-span-2 bg-slate-50 md:bg-transparent p-2 md:p-0 rounded-xl md:rounded-none">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase md:hidden mb-1">Izin/Sakit</div>
+                            <div class="font-bold text-amber-600 text-base md:text-sm">${izin}</div>
+                        </div>
+                        <div class="md:col-span-1 bg-slate-50 md:bg-transparent p-2 md:p-0 rounded-xl md:rounded-none">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase md:hidden mb-1">Alpa</div>
+                            <div class="font-bold text-rose-600 text-base md:text-sm">${alpa}</div>
+                        </div>
+                        <div class="md:col-span-2 hidden md:block font-bold">
+                            <span class="px-3 py-1.5 rounded-lg text-xs ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}%</span>
+                        </div>
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                container.appendChild(div);
             });
         };
 
