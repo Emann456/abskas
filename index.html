@@ -458,11 +458,20 @@
                     </div>
 
                     <!-- Search & Filter Bar -->
-                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-                        <div class="relative w-full sm:w-72">
+                    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 pb-4 border-b border-slate-50">
+                        <!-- Pencarian Nama -->
+                        <div class="relative w-full sm:w-1/2">
                             <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
                             <input type="text" id="search-anggota" onkeyup="renderAnggotaTable()" placeholder="Cari nama, kelas, atau skill..." class="w-full border border-slate-300 rounded-xl pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none transition">
                         </div>
+                        <!-- Filter Kelas Dinamis -->
+                        <div class="w-full sm:w-1/3">
+                            <select id="filter-class-anggota" onchange="renderAnggotaTable()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition">
+                                <option value="Semua">Semua Kelas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-2 flex justify-end">
                         <span id="member-count-badge" class="text-xs text-slate-500 font-medium">Menampilkan 0 Anggota</span>
                     </div>
 
@@ -549,6 +558,19 @@
                             <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2">
                                 <i class="fa-solid fa-file-excel"></i> Export CSV / Excel
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter Bar Mobile-Friendly -->
+                    <div class="mt-2 flex flex-col sm:flex-row items-center justify-between gap-3 pb-4 border-b border-slate-50">
+                        <div class="relative w-full sm:w-1/2">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                            <input type="text" id="search-rekap" onkeyup="renderRekapTable()" placeholder="Cari nama siswa..." class="w-full border border-slate-300 rounded-xl pl-11 pr-4 py-3 text-sm focus:ring-2 focus:ring-sky-500 outline-none transition">
+                        </div>
+                        <div class="w-full sm:w-1/3">
+                            <select id="filter-class-rekap" onchange="renderRekapTable()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition">
+                                <option value="Semua">Semua Kelas</option>
+                            </select>
                         </div>
                     </div>
 
@@ -1270,10 +1292,29 @@
         window.updateUserRoleBadge = applyRolePermissions;
 
         // --- FUNGSI HELPER UNTUK LOGIKA FILTER KELAS ---
-        // Memotong string kelas, contoh: "8 (kelas Z)" -> "8"
+        // Ekstrak angka utama (misal: "8,1" -> "8", "Kelas 7" -> "7")
         function getBaseClass(classString) {
             if (!classString) return '-';
-            return classString.trim().split(' ')[0];
+            const match = classString.match(/\d+/);
+            return match ? match[0] : classString.trim();
+        }
+
+        // Fungsi untuk mengenerate opsi dropdown kelas secara dinamis & terurut
+        function updateClassDropdown(selectId, membersList) {
+            const selectEl = document.getElementById(selectId);
+            if (!selectEl) return;
+            
+            const currentFilterVal = selectEl.value || 'Semua';
+            const baseClassesArray = membersList.map(m => getBaseClass(m.class)).filter(c => c !== '-');
+            
+            // Hapus duplikat dan urutkan secara numerik (7, 8, 9, 10, 11, 12 dst)
+            const uniqueClasses = [...new Set(baseClassesArray)].sort((a, b) => parseInt(a) - parseInt(b));
+            
+            let classOptions = `<option value="Semua">Semua Kelas</option>`;
+            uniqueClasses.forEach(c => {
+                classOptions += `<option value="${c}" ${currentFilterVal === c ? 'selected' : ''}>Kelas ${c}</option>`;
+            });
+            selectEl.innerHTML = classOptions;
         }
 
         window.renderAllViews = function() {
@@ -1401,21 +1442,8 @@
                 return;
             }
 
-            // Membangun Dropdown Filter Kelas secara dinamis dengan Logika Ekstrak Angka
-            const classFilter = document.getElementById('filter-class-absensi');
-            const currentFilterVal = classFilter?.value || 'Semua';
-            
-            // Mengambil angka awal (Base Class) lalu menghapus duplikat dengan Set
-            const baseClassesArray = activeMembers.map(m => getBaseClass(m.class));
-            const uniqueClasses = [...new Set(baseClassesArray)].sort();
-            
-            if (classFilter) {
-                let classOptions = `<option value="Semua">Semua Kelas</option>`;
-                uniqueClasses.forEach(c => {
-                    classOptions += `<option value="${c}" ${currentFilterVal === c ? 'selected' : ''}>Kelas ${c}</option>`;
-                });
-                classFilter.innerHTML = classOptions;
-            }
+            // Membangun Dropdown Filter Kelas secara dinamis
+            updateClassDropdown('filter-class-absensi', activeMembers);
 
             activeMembers.forEach((m, idx) => {
                 const record = currentSession[m.id] || { status: 'Hadir', note: '' };
@@ -1693,13 +1721,22 @@
             const container = document.getElementById('anggota-list-container');
             if (!container) return;
             const searchKey = (document.getElementById('search-anggota')?.value || '').toLowerCase();
+            const selectedClass = document.getElementById('filter-class-anggota')?.value || 'Semua';
             container.innerHTML = '';
 
-            const filtered = state.members.filter(m => 
-                m.name.toLowerCase().includes(searchKey) || 
-                m.class.toLowerCase().includes(searchKey) ||
-                (m.skills && m.skills.toLowerCase().includes(searchKey))
-            );
+            // Update dropdown kelas menggunakan semua data anggota
+            updateClassDropdown('filter-class-anggota', state.members);
+
+            const filtered = state.members.filter(m => {
+                const matchSearch = m.name.toLowerCase().includes(searchKey) || 
+                                    m.class.toLowerCase().includes(searchKey) ||
+                                    (m.skills && m.skills.toLowerCase().includes(searchKey));
+                
+                const rowBaseClass = getBaseClass(m.class);
+                const matchClass = selectedClass === 'Semua' || rowBaseClass === selectedClass;
+
+                return matchSearch && matchClass;
+            });
 
             document.getElementById('member-count-badge').innerText = `Menampilkan ${filtered.length} Anggota`;
 
@@ -1989,36 +2026,36 @@
         window.renderRekapTable = function() {
             const container = document.getElementById('rekap-list-container');
             if (!container) return;
+            const searchKey = (document.getElementById('search-rekap')?.value || '').toLowerCase();
+            const selectedClass = document.getElementById('filter-class-rekap')?.value || 'Semua';
+            
             container.innerHTML = '';
 
             const activeMembers = state.members.filter(m => m.status === 'Aktif');
+            
+            // Update dropdown filter kelas
+            updateClassDropdown('filter-class-rekap', activeMembers);
+
             if (activeMembers.length === 0) {
                 container.innerHTML = `<div class="text-center py-8 text-sm text-slate-400">Tidak ada data untuk direkap.</div>`;
                 return;
             }
 
+            const filtered = activeMembers.filter(m => {
+                const matchSearch = m.name.toLowerCase().includes(searchKey);
+                const rowBaseClass = getBaseClass(m.class);
+                const matchClass = selectedClass === 'Semua' || rowBaseClass === selectedClass;
+                return matchSearch && matchClass;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-sm text-slate-400">Tidak ada rekap untuk pencarian ini.</div>`;
+                return;
+            }
+
             const totalSessions = Object.keys(state.attendance).length;
 
-            activeMembers.forEach(m => {
-                let hadir = 0, izin = 0, alpa = 0;
-                Object.values(state.attendance).forEach(session => {
-                    if (session[m.id]) {
-                        const st = session[m.id].status;
-                        if (st === 'Hadir') hadir++;
-                        else if (st === 'Izin' || st === 'Sakit') izin++;
-                        else if (st === 'Alpa') alpa++;
-                    }
-                });
-
-                const pct = totalSessions > 0 ? Math.round((hadir / totalSessions) * 100) : 0;
-
-                const div = document.createElement('div');
-                div.className = "bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-4 md:gap-3 transition";
-                div.innerHTML = `
-                    <div class="md:col-span-4 flex justify-between items-start md:block border-b border-slate-100 md:border-0 pb-3 md:pb-0">
-                        <div>
-                            <h4 class="font-bold text-slate-800 text-base md:text-sm pl-2">${m.name}</h4>
-                            <div class="text-xs text-slate-500 mt-1 md:hidden pl-2">Kelas ${m.class}</div>
+            filtered.forEach(m => {
                         </div>
                         <span class="px-2.5 py-1.5 rounded-lg text-xs font-bold md:hidden ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}% Hadir</span>
                     </div>
