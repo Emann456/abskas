@@ -2056,6 +2056,24 @@
             const totalSessions = Object.keys(state.attendance).length;
 
             filtered.forEach(m => {
+                let hadir = 0, izin = 0, alpa = 0;
+                Object.values(state.attendance).forEach(session => {
+                    if (session[m.id]) {
+                        const st = session[m.id].status;
+                        if (st === 'Hadir') hadir++;
+                        else if (st === 'Izin' || st === 'Sakit') izin++;
+                        else if (st === 'Alpa') alpa++;
+                    }
+                });
+                const pct = totalSessions > 0 ? Math.round((hadir / totalSessions) * 100) : 0;
+
+                const div = document.createElement('div');
+                div.className = "bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-3 md:gap-4 transition";
+                div.innerHTML = `
+                    <div class="md:col-span-4 flex justify-between items-start md:block border-b border-slate-100 md:border-0 pb-3 md:pb-0 pl-2">
+                        <div>
+                            <div class="font-bold text-slate-800 text-base md:text-sm">${m.name}</div>
+                            <div class="text-xs text-slate-500 mt-1 md:hidden">Kelas ${m.class}</div>
                         </div>
                         <span class="px-2.5 py-1.5 rounded-lg text-xs font-bold md:hidden ${pct >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${pct}% Hadir</span>
                     </div>
