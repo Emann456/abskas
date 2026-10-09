@@ -21,7 +21,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Chart.js for Reports -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Supabase JS Client library CDN -->
@@ -242,7 +242,7 @@
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="font-bold text-slate-800 text-sm">Aktivitas Terakhir</h3>
                             <div class="flex items-center gap-2">
-                                <button id="btn-reset-absensi-dash" onclick="resetAbsensi()" class="text-[10px] bg-rose-50 text-rose-600 hover:bg-rose-100 font-semibold px-2 py-1.5 rounded-lg border border-rose-200 transition flex items-center gap-1">
+                                <button id="btn-reset-absensi-dash" onclick="confirmResetAbsensi()" class="text-[10px] bg-rose-50 text-rose-600 hover:bg-rose-100 font-semibold px-2 py-1.5 rounded-lg border border-rose-200 transition flex items-center gap-1">
                                     <i class="fa-solid fa-trash"></i> Reset Data
                                 </button>
                                 <button onclick="switchTab('absensi')" class="text-[11px] text-sky-600 font-semibold hover:underline hidden sm:block">Lihat Semua</button>
@@ -262,14 +262,14 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
                         <div>
                             <h2 class="text-xl font-bold text-slate-800">Presensi Kehadiran</h2>
-                            <p class="text-xs text-slate-500 mt-0.5">Pilih tanggal dan centang kehadiran anggota eskul.</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Default awal di posisi netral. Pilih tanggal dan klik kehadiran siswa.</p>
                         </div>
                         <div class="flex items-center gap-3 w-full sm:w-auto">
                             <div class="flex-1 sm:flex-none">
                                 <label class="block text-[10px] md:text-xs font-semibold text-slate-500 mb-1">Tanggal Absensi</label>
                                 <input type="date" id="absensi-date-input" onchange="loadAttendanceForDate()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 md:py-2.5 text-xs md:text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition">
                             </div>
-                            <button onclick="markAllPresent()" class="self-end bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-[11px] md:text-xs px-3.5 py-2.5 md:py-3 rounded-xl transition border border-emerald-200 flex items-center gap-1.5 whitespace-nowrap">
+                            <button onclick="markAllPresent()" class="self-end bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-[11px] md:text-xs px-3.5 py-2.5 md:py-3 rounded-xl transition border border-emerald-200 flex items-center gap-1.5 whitespace-nowrap shadow-sm">
                                 <i class="fa-solid fa-check-double"></i> Semua Hadir
                             </button>
                         </div>
@@ -428,7 +428,7 @@
                             <input type="month" id="filter-bulan-rekap" onchange="renderRekapTable()" class="w-full sm:w-auto bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition">
                             
                             <div class="flex gap-2 w-full sm:w-auto">
-                                <button id="btn-reset-absensi-rekap" onclick="resetAbsensi()" class="flex-1 sm:flex-none bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-sm transition border border-rose-200 flex items-center justify-center gap-1.5">
+                                <button id="btn-reset-absensi-rekap" onclick="confirmResetAbsensi()" class="flex-1 sm:flex-none bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-sm transition border border-rose-200 flex items-center justify-center gap-1.5">
                                     <i class="fa-solid fa-trash-can"></i> Reset
                                 </button>
                                 <button onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-2">
@@ -759,6 +759,21 @@
         </div>
     </div>
 
+    <!-- CUSTOM CONFIRMATION MODAL (NO BROWSER ALERT/CONFIRM) -->
+    <div id="modal-confirm" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 mx-auto flex items-center justify-center text-xl font-bold">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="confirm-title" class="text-base font-bold text-slate-800">Konfirmasi Hapus</h3>
+            <p id="confirm-msg" class="text-xs text-slate-500 leading-relaxed">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="closeConfirmModal(false)" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition">Batal</button>
+                <button type="button" id="confirm-ok-btn" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md shadow-rose-600/20 transition">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST CONTAINER -->
     <div id="toast-container" class="fixed bottom-5 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto md:right-5 z-50 flex flex-col gap-2 pointer-events-none w-[90%] md:w-auto"></div>
 
@@ -777,8 +792,8 @@
         let state = {
             members: [],
             attendance: {},
-            kas: {},          // Tetap disimpan agar data lama tidak error jika di-load
-            expenses: [],     // Tetap disimpan
+            kas: {},          
+            expenses: [],     
             akumulasiPengeluaran: 0,
             seniors: [
                 { id: 'sn-1', name: 'Senior Dimas', username: 'dimas', pin: '1122' }
@@ -797,8 +812,27 @@
         let dashboardChartInstance = null;
         let supabaseClient = null;
         let currentMateriFilter = 'semua';
+        let confirmCallback = null;
         
         const SESSION_KEY = 'eskul_login_session_v4';
+
+        // Custom Confirm Dialog Helper
+        function showConfirmDialog(title, message, onConfirm) {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-msg').innerText = message;
+            confirmCallback = onConfirm;
+            document.getElementById('modal-confirm').classList.remove('hidden');
+        }
+
+        function closeConfirmModal(isOk) {
+            document.getElementById('modal-confirm').classList.add('hidden');
+            if (isOk && typeof confirmCallback === 'function') {
+                confirmCallback();
+            }
+            confirmCallback = null;
+        }
+
+        document.getElementById('confirm-ok-btn').onclick = () => closeConfirmModal(true);
 
         // --- FUNGSI HELPER UNTUK LOGIKA FILTER KELAS (REGEX) ---
         function getBaseClass(classString) {
@@ -965,7 +999,6 @@
                 tabName = 'dashboard';
             }
 
-            // Uang Kas is completely removed from tabs logic
             const tabs = ['dashboard', 'absensi', 'anggota', 'rekap', 'materi', 'pengguna'];
             tabs.forEach(t => {
                 const view = document.getElementById(`view-${t}`);
@@ -1272,7 +1305,7 @@
             if (!container) return;
             container.innerHTML = '';
 
-            const currentSession = state.attendance[selectedDate] || {};
+            const currentSession = state.attendance[selectedDate] || null;
             const activeMembers = state.members.filter(m => m.status === 'Aktif');
 
             if (activeMembers.length === 0) {
@@ -1283,8 +1316,9 @@
             updateClassDropdown('filter-class-absensi', activeMembers);
 
             activeMembers.forEach((m, idx) => {
-                const record = currentSession[m.id] || { status: 'Hadir', note: '' };
-                const st = record.status;
+                // LOGIKA NETRAL: Jika belum pernah disimpan, statusnya KOSONG ('') bukan otomatis 'Hadir'
+                const record = currentSession ? (currentSession[m.id] || { status: 'Alpa', note: '' }) : { status: '', note: '' };
+                const st = record.status; // Can be 'Hadir', 'Izin', 'Sakit', 'Alpa', or ''
                 const div = document.createElement('div');
                 
                 div.className = "absensi-row bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-3 md:gap-4 transition-all duration-200";
@@ -1328,7 +1362,7 @@
 
             document.getElementById('attendance-status-text').innerHTML = state.attendance[selectedDate] 
                 ? `<i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> Data untuk tanggal ini sudah tersimpan.` 
-                : `<i class="fa-solid fa-circle-exclamation text-amber-500 mr-1"></i> Belum disimpan untuk tanggal ini.`;
+                : `<i class="fa-solid fa-circle-info text-sky-500 mr-1"></i> Posisi netral. Silakan centang atau klik 'Semua Hadir'.`;
 
             filterAbsensiTable();
         };
@@ -1390,7 +1424,7 @@
                     }
                 }
             });
-            showToast(`${count} siswa (di layar) ditandai Hadir.`, "success");
+            showToast(`${count} siswa ditandai Hadir.`, "success");
         };
 
         window.saveAttendanceSession = function() {
@@ -1399,34 +1433,51 @@
 
             const activeMembers = state.members.filter(m => m.status === 'Aktif');
             const sessionData = {};
+            let unselectedCount = 0;
 
             activeMembers.forEach(m => {
-                const status = document.getElementById(`att-status-${m.id}`)?.value || 'Hadir';
+                let status = document.getElementById(`att-status-${m.id}`)?.value || '';
                 const note = document.getElementById(`att-note-${m.id}`)?.value.trim() || '';
+                
+                // Jika siswa tidak diklik/dibiarkan netral, otomatis dicatat ALPA
+                if (!status) {
+                    status = 'Alpa';
+                    unselectedCount++;
+                }
                 sessionData[m.id] = { status, note };
             });
 
             state.attendance[date] = sessionData;
             saveLocalData();
-            showToast(`Presensi tanggal ${date} berhasil disimpan!`, "success");
+            
+            if (unselectedCount > 0) {
+                showToast(`Presensi tersimpan! (${unselectedCount} siswa netral otomatis Alpa)`, "success");
+            } else {
+                showToast(`Presensi tanggal ${date} berhasil disimpan!`, "success");
+            }
+            
             loadAttendanceForDate();
             renderDashboard();
         };
 
-        window.resetAbsensi = function() {
+        window.confirmResetAbsensi = function() {
             if (currentUserRole !== 'Pelatih Utama') {
                 showToast("Akses ditolak: Hanya Pelatih Utama.", "error");
                 return;
             }
 
-            if (confirm("AWAS!\nYakin ingin menghapus SEMUA riwayat presensi yang pernah di-input?\nData yang dihapus tidak bisa dikembalikan!")) {
-                state.attendance = {};
-                saveLocalData(); 
-                showToast("Data presensi berhasil dikosongkan!", "success");
-                renderDashboard();
-                loadAttendanceForDate();
-                renderRekapTable();
-            }
+            showConfirmDialog(
+                "Reset Semua Presensi?",
+                "Tindakan ini akan MENGHAPUS SELURUH data riwayat presensi yang pernah di-input. Data tidak bisa dikembalikan!",
+                function() {
+                    state.attendance = {};
+                    saveLocalData(); 
+                    showToast("Data presensi berhasil dikosongkan!", "success");
+                    renderDashboard();
+                    loadAttendanceForDate();
+                    renderRekapTable();
+                }
+            );
         };
 
         window.renderAnggotaTable = function() {
@@ -1597,13 +1648,17 @@
         };
 
         window.deleteMember = function(id) {
-            if (confirm("Apakah Anda yakin ingin menghapus data anggota ini?")) {
-                state.members = state.members.filter(x => x.id !== id);
-                saveLocalData();
-                showToast("Anggota berhasil dihapus.", "success");
-                renderAnggotaTable();
-                renderDashboard();
-            }
+            showConfirmDialog(
+                "Hapus Anggota?",
+                "Apakah Anda yakin ingin menghapus data anggota ini?",
+                function() {
+                    state.members = state.members.filter(x => x.id !== id);
+                    saveLocalData();
+                    showToast("Anggota berhasil dihapus.", "success");
+                    renderAnggotaTable();
+                    renderDashboard();
+                }
+            );
         };
 
         window.renderMateriSection = function() {
@@ -1729,12 +1784,16 @@
         };
 
         window.deleteMateri = function(id) {
-            if (confirm("Hapus materi ini dari kurikulum?")) {
-                state.materi = state.materi.filter(x => x.id !== id);
-                saveLocalData();
-                showToast("Materi dihapus.", "success");
-                renderMateriSection();
-            }
+            showConfirmDialog(
+                "Hapus Materi?",
+                "Hapus materi ini dari kurikulum?",
+                function() {
+                    state.materi = state.materi.filter(x => x.id !== id);
+                    saveLocalData();
+                    showToast("Materi dihapus.", "success");
+                    renderMateriSection();
+                }
+            );
         };
 
         window.renderRekapTable = function() {
@@ -1782,7 +1841,6 @@
                 return;
             }
 
-            // Membangun tampilan Card untuk setiap member
             filteredMembers.forEach(m => {
                 let hadir = 0, izin = 0, alpa = 0;
                 
@@ -1938,12 +1996,16 @@
         };
 
         window.deleteSenior = function(id) {
-            if (confirm("Hapus akun senior ini? Mereka tidak akan bisa login lagi.")) {
-                state.seniors = state.seniors.filter(s => s.id !== id);
-                saveLocalData();
-                showToast("Akun senior dihapus.", "success");
-                renderSeniorTable();
-            }
+            showConfirmDialog(
+                "Hapus Akun Senior?",
+                "Hapus akun senior ini? Mereka tidak akan bisa login lagi.",
+                function() {
+                    state.seniors = state.seniors.filter(s => s.id !== id);
+                    saveLocalData();
+                    showToast("Akun senior dihapus.", "success");
+                    renderSeniorTable();
+                }
+            );
         };
 
         function showToast(message, type = "success") {
