@@ -67,7 +67,7 @@
                     <i class="fa-solid fa-users-rectangle text-white"></i>
                 </div>
                 <h2 class="text-2xl font-extrabold tracking-tight">E-Absen</h2>
-                <p class="text-xs text-slate-400 mt-1">Absensi dan Kelola Kas Ekstrakulikuler</p>
+                <p class="text-xs text-slate-400 mt-1">Absensi Ekstrakurikuler</p>
             </div>
 
             <!-- Login Form -->
@@ -165,10 +165,6 @@
                     <button onclick="switchTab('absensi')" id="tab-absensi" class="tab-btn px-4 py-2.5 sm:py-2 rounded-xl font-medium text-[13px] md:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-clipboard-user"></i> Absensi
                     </button>
-                    <!-- UANG KAS TAB DISEMBUNYIKAN UNTUK SEMENTARA -->
-                    <button onclick="switchTab('kas')" id="tab-kas" class="hidden tab-btn px-4 py-2.5 sm:py-2 rounded-xl font-medium text-[13px] md:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
-                        <i class="fa-solid fa-wallet"></i> Uang Kas
-                    </button>
                     <button onclick="switchTab('anggota')" id="tab-anggota" class="tab-btn px-4 py-2.5 sm:py-2 rounded-xl font-medium text-[13px] md:text-sm text-slate-300 hover:bg-slate-700 hover:text-white flex items-center gap-2 transition">
                         <i class="fa-solid fa-user-group"></i> Data Anggota
                     </button>
@@ -194,7 +190,7 @@
                 <div class="bg-gradient-to-r from-sky-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                         <h2 class="text-xl md:text-2xl font-bold">Selamat Datang, <span id="dash-user-name">Pelatih</span>!</h2>
-                        <p class="text-sky-100 text-xs md:text-sm mt-1">Reminder absen dan kas disini. Langsung bisa dipantau Kak Fathur!</p>
+                        <p class="text-sky-100 text-xs md:text-sm mt-1">Reminder absensi ada disini. Langsung bisa dipantau Kak Fathur!</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <button onclick="switchTab('absensi')" class="bg-white text-sky-700 font-semibold px-4 py-2.5 rounded-xl hover:bg-sky-50 transition shadow text-xs sm:text-sm flex items-center gap-2">
@@ -203,7 +199,7 @@
                     </div>
                 </div>
 
-                <!-- Stats Grid (Kas stats disembunyikan sementara) -->
+                <!-- Stats Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
                     <div class="bg-white rounded-2xl p-4 md:p-5 border border-slate-200 shadow-sm hover:shadow-md transition">
                         <div class="flex items-center justify-between">
@@ -290,7 +286,6 @@
                         <div class="w-full sm:w-1/3">
                             <select id="filter-class-absensi" onchange="filterAbsensiTable()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 md:py-3 text-xs md:text-sm font-medium text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition appearance-none">
                                 <option value="Semua">Semua Kelas</option>
-                                <!-- Populated dynamically -->
                             </select>
                         </div>
                     </div>
@@ -321,14 +316,6 @@
                 </div>
             </section>
 
-            <!-- UANG KAS VIEW (Kode tetap dijaga jika nanti diaktifkan kembali) -->
-            <section id="view-kas" class="hidden space-y-6">
-                <!-- Code is preserved but hidden by default based on initial state -->
-                <div class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl text-sm font-medium">
-                    Fitur Uang Kas Sedang Dinonaktifkan Sementara.
-                </div>
-            </section>
-
             <!-- ANGGOTA VIEW -->
             <section id="view-anggota" class="hidden space-y-6">
                 <div class="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 shadow-sm">
@@ -349,7 +336,7 @@
                             <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 md:top-3.5 text-slate-400 text-sm"></i>
                             <input type="text" id="search-anggota" onkeyup="renderAnggotaTable()" placeholder="Cari nama, kelas, atau skill..." class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-4 py-2.5 md:py-3 text-xs md:text-sm focus:ring-2 focus:ring-sky-500 outline-none transition">
                         </div>
-                        <!-- Filter Kelas Dinamis (WITH REGEX NOW) -->
+                        <!-- Filter Kelas Dinamis (WITH REGEX) -->
                         <div class="w-full sm:w-1/3">
                             <select id="filter-class-anggota" onchange="renderAnggotaTable()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 md:py-3 text-xs md:text-sm font-medium text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition appearance-none">
                                 <option value="Semua">Semua Kelas</option>
@@ -379,7 +366,7 @@
                 </div>
             </section>
 
-            <!-- MATERI & KURIKULUM VIEW (KHUSUS PELATIH & SENIOR) -->
+            <!-- MATERI & KURIKULUM VIEW -->
             <section id="view-materi" class="hidden space-y-6">
                 <!-- Progress Header -->
                 <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 rounded-2xl p-5 md:p-6 text-white shadow-xl space-y-4 md:space-y-5">
@@ -429,30 +416,30 @@
             <!-- REKAP VIEW -->
             <section id="view-rekap" class="hidden space-y-6">
                 <div class="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 shadow-sm space-y-6">
-                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-5 border-b border-slate-100">
+                    <!-- Layout Fix for Mobile Rekap Controls -->
+                    <div class="flex flex-col md:flex-row md:items-start justify-between gap-5 pb-5 border-b border-slate-100">
                         <div>
                             <h2 class="text-xl font-bold text-slate-800">Rekap Bulanan</h2>
                             <p class="text-[11px] md:text-xs text-slate-500 mt-1 max-w-md">Persentase kehadiran per siswa. Pilih bulan untuk melihat atau mengekspor rekap spesifik.</p>
                         </div>
                         
-                        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                            <!-- Filter Bulan Rekap -->
-                            <div class="relative flex-1 md:flex-none">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"><i class="fa-solid fa-calendar-days"></i></span>
-                                <input type="month" id="filter-bulan-rekap" onchange="renderRekapTable()" class="w-full md:w-auto pl-8 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-sky-500 text-slate-700 outline-none transition">
-                            </div>
+                        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                            <!-- Filter Bulan (Block input on mobile for safety) -->
+                            <input type="month" id="filter-bulan-rekap" onchange="renderRekapTable()" class="w-full sm:w-auto bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-sky-500 outline-none transition">
                             
-                            <button id="btn-reset-absensi-rekap" onclick="resetAbsensi()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-sm transition border border-rose-200 flex items-center justify-center gap-1.5 flex-1 md:flex-none">
-                                <i class="fa-solid fa-trash-can"></i> Reset All
-                            </button>
-                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-2 w-full md:w-auto">
-                                <i class="fa-solid fa-file-excel"></i> Download Excel
-                            </button>
+                            <div class="flex gap-2 w-full sm:w-auto">
+                                <button id="btn-reset-absensi-rekap" onclick="resetAbsensi()" class="flex-1 sm:flex-none bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-sm transition border border-rose-200 flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-trash-can"></i> Reset
+                                </button>
+                                <button onclick="exportToCSV()" class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-file-excel"></i> Export Excel
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Search & Filter Bar Mobile-Friendly -->
-                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-2 border-b border-transparent">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-2">
                         <div class="relative w-full sm:w-1/2">
                             <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 md:top-3.5 text-slate-400 text-sm"></i>
                             <input type="text" id="search-rekap" onkeyup="renderRekapTable()" placeholder="Cari nama siswa..." class="w-full bg-slate-50 border border-slate-300 rounded-xl pl-11 pr-4 py-2.5 md:py-3 text-xs md:text-sm focus:ring-2 focus:ring-sky-500 outline-none transition">
@@ -465,7 +452,7 @@
                     </div>
 
                     <!-- Summary List (Mobile Optimized Cards) -->
-                    <div>
+                    <div class="mt-2">
                         <!-- List Header (Hidden on Mobile) -->
                         <div class="hidden md:grid grid-cols-12 gap-4 bg-slate-50 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-xl p-4 mb-3 border border-slate-100 text-center items-center">
                             <div class="col-span-4 text-left pl-2">Nama Siswa</div>
@@ -790,8 +777,8 @@
         let state = {
             members: [],
             attendance: {},
-            kas: {},
-            expenses: [],
+            kas: {},          // Tetap disimpan agar data lama tidak error jika di-load
+            expenses: [],     // Tetap disimpan
             akumulasiPengeluaran: 0,
             seniors: [
                 { id: 'sn-1', name: 'Senior Dimas', username: 'dimas', pin: '1122' }
@@ -814,14 +801,13 @@
         const SESSION_KEY = 'eskul_login_session_v4';
 
         // --- FUNGSI HELPER UNTUK LOGIKA FILTER KELAS (REGEX) ---
-        // Ekstrak angka utama (misal: "7,3 (kelas B)" -> "7", "Kelas 12" -> "12")
         function getBaseClass(classString) {
             if (!classString) return '-';
             const match = classString.match(/\d+/);
             return match ? match[0] : classString.trim();
         }
 
-        // Fungsi mengenerate opsi dropdown kelas secara dinamis & terurut (7, 8, 9, 10)
+        // Generate dropdown kelas (Sorted Numerically)
         function updateClassDropdown(selectId, membersList) {
             const selectEl = document.getElementById(selectId);
             if (!selectEl) return;
@@ -829,7 +815,6 @@
             const currentFilterVal = selectEl.value || 'Semua';
             const baseClassesArray = membersList.map(m => getBaseClass(m.class)).filter(c => c !== '-');
             
-            // Hapus duplikat dan urutkan secara numerik
             const uniqueClasses = [...new Set(baseClassesArray)].sort((a, b) => parseInt(a) - parseInt(b));
             
             let classOptions = `<option value="Semua">Semua Kelas</option>`;
@@ -839,7 +824,6 @@
             selectEl.innerHTML = classOptions;
         }
 
-        // Load data from LocalStorage
         function loadLocalData() {
             try {
                 const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -872,8 +856,6 @@
                     supabaseClient = window.supabase.createClient(state.supabaseUrl, state.supabaseKey);
                     updateDbStatusIndicator(true);
                     fetchFromSupabase();
-                    
-                    // Always subscribe for real-time magic
                     subscribeToSupabaseRealtime();
                 } catch (e) {
                     console.error("Supabase init error:", e);
@@ -941,7 +923,6 @@
                             };
                             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
                             
-                            // Hanya render jika user sedang di dalam app (sudah login)
                             if (document.getElementById('app-container').classList.contains('flex')) {
                                 renderAllViews();
                                 showToast("Data diperbarui realtime dari Cloud!", "success");
@@ -975,7 +956,6 @@
 
         window.handleSaveSupabaseConfig = async function(e) {
             e.preventDefault();
-            // Locked to Auto-Config for stability
             closeModalSupabase();
         };
 
@@ -985,7 +965,8 @@
                 tabName = 'dashboard';
             }
 
-            const tabs = ['dashboard', 'absensi', 'anggota', 'rekap', 'materi', 'pengguna', 'kas'];
+            // Uang Kas is completely removed from tabs logic
+            const tabs = ['dashboard', 'absensi', 'anggota', 'rekap', 'materi', 'pengguna'];
             tabs.forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 const btn = document.getElementById(`tab-${t}`);
@@ -1201,7 +1182,6 @@
             });
             document.getElementById('stat-hadir-today').innerText = presentToday;
             
-            // Format Tanggal Indo
             const options = { weekday: 'short', day: 'numeric', month: 'short' };
             const todayFormatted = new Date().toLocaleDateString('id-ID', options);
             document.getElementById('stat-absensi-date').innerText = todayFormatted;
@@ -1300,7 +1280,6 @@
                 return;
             }
 
-            // Membangun Dropdown Filter Kelas secara dinamis (Dengan Regex)
             updateClassDropdown('filter-class-absensi', activeMembers);
 
             activeMembers.forEach((m, idx) => {
@@ -1308,7 +1287,6 @@
                 const st = record.status;
                 const div = document.createElement('div');
                 
-                // Kartu Absensi Responsif
                 div.className = "absensi-row bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-3 md:gap-4 transition-all duration-200";
                 div.setAttribute('data-name', m.name);
                 div.setAttribute('data-class', m.class);
@@ -1400,14 +1378,10 @@
         };
 
         window.markAllPresent = function() {
-            const activeMembers = state.members.filter(m => m.status === 'Aktif');
             let count = 0;
-            
-            // Only mark visible rows (to respect filters)
             const rows = document.querySelectorAll('.absensi-row');
             rows.forEach(row => {
                 if(row.style.display !== 'none') {
-                    // Extract ID from the H button ID
                     const btn = row.querySelector('[id^="btn-H-"]');
                     if(btn) {
                         const id = btn.id.replace('btn-H-', '');
@@ -1462,7 +1436,6 @@
             const selectedClass = document.getElementById('filter-class-anggota')?.value || 'Semua';
             container.innerHTML = '';
 
-            // Update dropdown kelas menggunakan semua data anggota
             updateClassDropdown('filter-class-anggota', state.members);
 
             const filtered = state.members.filter(m => {
@@ -1485,8 +1458,6 @@
 
             filtered.forEach((m, idx) => {
                 const div = document.createElement('div');
-                
-                // Responsive Card Design
                 div.className = "bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-3 md:gap-4 transition-all";
                 div.innerHTML = `
                     <div class="md:col-span-1 text-sm text-slate-400 font-bold hidden md:block pl-2">${idx + 1}</div>
@@ -1773,7 +1744,6 @@
 
             const activeMembers = state.members.filter(m => m.status === 'Aktif');
             
-            // 1. Update dropdown filter kelas
             updateClassDropdown('filter-class-rekap', activeMembers);
 
             if (activeMembers.length === 0) {
@@ -1781,11 +1751,10 @@
                 return;
             }
 
-            // 2. LOGIKA FILTER BULAN (YYYY-MM)
+            // 1. LOGIKA FILTER BULAN (YYYY-MM)
             const filterBulanInput = document.getElementById('filter-bulan-rekap');
             let selectedMonth = filterBulanInput ? filterBulanInput.value : '';
             
-            // Set default ke bulan ini jika kosong
             if (!selectedMonth) {
                 const now = new Date();
                 const yyyy = now.getFullYear();
@@ -1794,11 +1763,10 @@
                 if (filterBulanInput) filterBulanInput.value = selectedMonth;
             }
 
-            // Ambil array tanggal absensi yang HANYA berawalan bulan terpilih
             const attendanceKeys = Object.keys(state.attendance).filter(dateStr => dateStr.startsWith(selectedMonth));
             const totalSessions = attendanceKeys.length;
 
-            // 3. LOGIKA FILTER KELAS & SEARCH
+            // 2. LOGIKA FILTER KELAS & SEARCH
             const searchKey = (document.getElementById('search-rekap')?.value || '').toLowerCase();
             const selectedClass = document.getElementById('filter-class-rekap')?.value || 'Semua';
 
@@ -1818,7 +1786,6 @@
             filteredMembers.forEach(m => {
                 let hadir = 0, izin = 0, alpa = 0;
                 
-                // Menghitung kehadiran HANYA pada bulan terpilih
                 attendanceKeys.forEach(date => {
                     const session = state.attendance[date];
                     if (session && session[m.id]) {
@@ -1832,7 +1799,6 @@
                 const pct = totalSessions > 0 ? Math.round((hadir / totalSessions) * 100) : 0;
 
                 const div = document.createElement('div');
-                // Responsive Card Design
                 div.className = "bg-white border border-slate-200 md:border-slate-100 rounded-2xl md:rounded-xl p-4 md:p-3 shadow-sm md:shadow-none md:hover:shadow-md flex flex-col md:grid md:grid-cols-12 md:items-center gap-3 md:gap-4 transition-all";
                 
                 div.innerHTML = `
@@ -1869,10 +1835,7 @@
         };
 
         window.exportToCSV = function() {
-            // Ambil bulan terpilih
             const selectedMonth = document.getElementById('filter-bulan-rekap')?.value || new Date().toISOString().slice(0,7);
-            
-            // Generate nama bulan untuk judul file (Contoh: "September 2026")
             const dateStr = selectedMonth + '-01'; 
             const d = new Date(dateStr);
             let namaBulan = 'Semua';
